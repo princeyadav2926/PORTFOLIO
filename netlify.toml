@@ -1,0 +1,48 @@
+# ===================================================================
+# Netlify Configuration for Prince Kumar Portfolio (React + Vite)
+# ===================================================================
+
+[build]
+  # Build production assets using Vite
+  command = "npm run build"
+  # Crucial: publish dist folder (where compiled JS/CSS live), NOT project root!
+  publish = "dist"
+
+# Netlify Serverless Functions directory (powers /api/contact on Netlify)
+[functions]
+  directory = "netlify/functions"
+
+# API Route proxy for Contact Form
+[[redirects]]
+  from = "/api/contact"
+  to = "/.netlify/functions/contact"
+  status = 200
+
+# Single Page Application (SPA) redirect rule:
+# Ensures page refreshes and direct links route through index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Explicit MIME types and caching headers for production JavaScript & CSS assets
+# Prevents "Expected a JavaScript-or-Wasm module script, but the server responded with a MIME type application/octet-stream"
+[[headers]]
+  for = "/assets/*.js"
+  [headers.values]
+    Content-Type = "application/javascript; charset=utf-8"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/*.css"
+  [headers.values]
+    Content-Type = "text/css; charset=utf-8"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Security & best-practice headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

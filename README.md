@@ -130,6 +130,17 @@ recipient_email=princeraj.947168@gmail.com
 4. Framework preset will automatically detect **Vite**.
 5. Click **"Deploy"**. The included `vercel.json` ensures instant configuration!
 
+### Deploying to Netlify
+1. Connect your GitHub repository to [Netlify](https://app.netlify.com/).
+2. The included `netlify.toml` automatically configures:
+   - **Build command:** `npm run build`
+   - **Publish directory:** `dist`
+   - **MIME Types & Headers:** Correct JavaScript MIME types for `.js` modules
+   - **SPA Redirects:** `/*` to `/index.html`
+3. In **Site Configuration** → **Environment Variables**, add:
+   - `web3forms_access_key`: `bcd8c16e-7b25-4c3e-b05e-a6bb29071834`
+4. Click **Deploy Site**.
+
 ---
 
 ## 👤 Developer Profile

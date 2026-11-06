@@ -7,6 +7,12 @@ export default defineConfig(({ mode }) => {
   Object.assign(process.env, env);
 
   return {
+    base: '/',
+    define: {
+      'import.meta.env.VITE_WEB3FORMS_ACCESS_KEY': JSON.stringify(
+        env.web3forms_access_key || env.WEB3FORMS_ACCESS_KEY || ''
+      )
+    },
     plugins: [
       react(),
       {
@@ -114,6 +120,8 @@ export default defineConfig(({ mode }) => {
       }
     ],
     build: {
+      outDir: 'dist',
+      emptyOutDir: true,
       rollupOptions: {
         output: {
           manualChunks: {
