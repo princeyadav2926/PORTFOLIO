@@ -4,7 +4,7 @@
 
 @layer base {
   * {
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(214, 173, 96, 0.15);
   }
   
   html {
@@ -13,75 +13,77 @@
   }
 
   body {
-    background-color: #07080b;
-    color: #e4e4e7;
+    background-color: #0B0D0E;
+    color: #F5F5F0;
     overflow-x: hidden;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
-  /* Custom scrollbar */
+  /* Custom matte gold scrollbar */
   ::-webkit-scrollbar {
-    width: 7px;
+    width: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #07080b;
+    background: #0B0D0E;
   }
   ::-webkit-scrollbar-thumb {
-    background: #1f2330;
+    background: #22272A;
     border-radius: 4px;
+    border: 1px solid rgba(214, 173, 96, 0.15);
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #d97706;
+    background: #D6AD60;
   }
 }
 
-/* Bespoke Matte Glassmorphism & Depth - Natural Engineering Aesthetic */
-.glass-panel {
-  background: rgba(14, 16, 23, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.5);
+/* Premium Matte Charcoal & Champagne Gold Cards */
+.matte-card {
+  background: #15191B;
+  border: 1px solid rgba(214, 173, 96, 0.20);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8), 0 0 15px -3px rgba(214, 173, 96, 0.05);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.matte-card:hover {
+  border-color: rgba(214, 173, 96, 0.45);
+  box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.9), 0 0 24px -2px rgba(214, 173, 96, 0.15);
 }
 
 .glass-card {
-  background: rgba(13, 15, 21, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.7);
+  background: #15191B;
+  border: 1px solid rgba(214, 173, 96, 0.20);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8), 0 0 15px -3px rgba(214, 173, 96, 0.05);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card:hover {
-  border-color: rgba(245, 158, 11, 0.35);
-  box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.8), 0 0 20px -2px rgba(245, 158, 11, 0.08);
+  border-color: rgba(214, 173, 96, 0.45);
+  box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.9), 0 0 24px -2px rgba(214, 173, 96, 0.15);
 }
 
 .text-gradient-gold {
-  background: linear-gradient(135deg, #ffffff 0%, #fde68a 45%, #f59e0b 100%);
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5E6C8 40%, #D6AD60 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .text-gradient-titanium {
-  background: linear-gradient(135deg, #ffffff 0%, #e4e4e7 50%, #a1a1aa 100%);
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F0 50%, #A7AAA8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.engineering-grid {
+.subtle-matte-grid {
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-  background-size: 36px 36px;
+    linear-gradient(to right, rgba(214, 173, 96, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(214, 173, 96, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
 }
 
-.ambient-warm-glow {
-  background: radial-gradient(circle at 50% 15%, rgba(245, 158, 11, 0.06) 0%, rgba(217, 119, 6, 0.02) 40%, transparent 70%);
+.ambient-champagne-glow {
+  background: radial-gradient(circle at 50% 12%, rgba(214, 173, 96, 0.06) 0%, rgba(214, 173, 96, 0.015) 45%, transparent 70%);
 }
 
-/* 3D tilt container perspective */
 .preserve-3d {
   transform-style: preserve-3d;
 }

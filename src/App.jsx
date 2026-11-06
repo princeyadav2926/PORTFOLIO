@@ -27,7 +27,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#07080b] text-zinc-100 flex flex-col font-sans selection:bg-amber-500/30 selection:text-amber-200 relative">
+    <div className="min-h-screen bg-[#0B0D0E] text-[#F5F5F0] flex flex-col font-sans selection:bg-[#D6AD60]/25 selection:text-[#F5E6C8] relative">
       {/* Top Navigation */}
       <Navbar onOpenResume={() => setIsResumeOpen(true)} />
 
@@ -53,12 +53,12 @@ export default function App() {
       <div className="fixed bottom-6 right-6 z-40 hidden sm:flex items-center">
         <button
           onClick={() => setIsPaletteOpen(true)}
-          className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-carbon-900/90 hover:bg-carbon-800 border border-zinc-700/80 hover:border-amber-500/60 text-zinc-300 hover:text-amber-300 text-xs font-mono shadow-xl backdrop-blur-md transition-all transform hover:scale-105 active:scale-95"
+          className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#15191B]/95 hover:bg-[#1B2023] border border-[#D6AD60]/30 hover:border-[#D6AD60] text-[#A7AAA8] hover:text-[#D6AD60] text-xs font-mono shadow-xl backdrop-blur-md transition-all transform hover:scale-105 active:scale-95"
           title="Press Ctrl+K or Cmd+K to open search"
         >
-          <Search className="w-3.5 h-3.5 text-amber-400" />
-          <span className="text-zinc-400">Search</span>
-          <kbd className="px-1.5 py-0.5 rounded bg-carbon-950 border border-zinc-700 text-[10px] text-amber-400">
+          <Search className="w-3.5 h-3.5 text-[#D6AD60]" />
+          <span className="text-[#A7AAA8]">Search</span>
+          <kbd className="px-1.5 py-0.5 rounded bg-[#0B0D0E] border border-[#D6AD60]/20 text-[10px] text-[#D6AD60]">
             ⌘K
           </kbd>
         </button>

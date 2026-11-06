@@ -81,19 +81,19 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-24 relative overflow-hidden bg-[#07080b] border-t border-zinc-800 engineering-grid">
+    <section id="contact" className="py-24 relative overflow-hidden bg-[#0B0D0E] border-t border-[#D6AD60]/20 subtle-matte-grid">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-carbon-900 border border-zinc-800 text-amber-400 text-xs font-mono tracking-wider uppercase">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#15191B] border border-[#D6AD60]/20 text-[#D6AD60] text-xs font-mono tracking-wider uppercase">
             <Mail className="w-3.5 h-3.5" />
             <span>Initiate Collaboration</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#F5F5F0] tracking-tight">
             Have an Idea? <span className="text-gradient-gold">Let's Build Something Together.</span>
           </h2>
-          <p className="text-zinc-400 text-sm sm:text-base">
+          <p className="text-[#A7AAA8] text-sm sm:text-base">
             Reach out for software roles, internships, or engineering discussions.
           </p>
         </div>
@@ -103,19 +103,19 @@ export default function Contact() {
           {/* Left Column: Direct Info & Socials */}
           <div className="lg:col-span-5 space-y-6">
             <Card3D depth={15} maxTilt={6}>
-              <div className="glass-card rounded-2xl p-6 sm:p-8 border border-zinc-800 space-y-6">
+              <div className="matte-card rounded-2xl p-6 sm:p-8 space-y-6">
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-2">
+                  <h3 className="text-xl font-bold text-[#F5F5F0] mb-2">
                     Contact Information
                   </h3>
-                  <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[#A7AAA8] leading-relaxed">
                     I am actively seeking software developer internships, full stack opportunities, and impactful tech collaborations.
                   </p>
                 </div>
 
                 {/* Email Box */}
-                <div className="p-4 rounded-xl bg-carbon-950 border border-zinc-800 space-y-2">
-                  <div className="flex items-center justify-between text-xs font-mono text-amber-400">
+                <div className="p-4 rounded-xl bg-[#0B0D0E] border border-[#D6AD60]/20 space-y-2">
+                  <div className="flex items-center justify-between text-xs font-mono text-[#D6AD60]">
                     <span className="flex items-center gap-1.5">
                       <Mail className="w-3.5 h-3.5" /> Direct Email
                     </span>
@@ -128,7 +128,7 @@ export default function Contact() {
                           setIsEditingEmail(true);
                         }
                       }}
-                      className="text-zinc-400 hover:text-amber-300 flex items-center gap-1 transition-colors"
+                      className="text-[#A7AAA8] hover:text-[#D6AD60] flex items-center gap-1 transition-colors"
                       title={isEditingEmail ? "Save email" : "Edit email"}
                     >
                       {isEditingEmail ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Edit3 className="w-3.5 h-3.5" />}
@@ -142,25 +142,25 @@ export default function Contact() {
                         type="email"
                         value={tempEmail}
                         onChange={(e) => setTempEmail(e.target.value)}
-                        className="w-full bg-carbon-900 border border-amber-500 rounded px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none"
+                        className="w-full bg-[#15191B] border border-[#D6AD60] rounded px-2.5 py-1.5 text-xs text-[#F5F5F0] font-mono focus:outline-none"
                         placeholder="your.email@example.com"
                         autoFocus
                       />
                       <button
                         onClick={handleSaveEmail}
-                        className="px-2.5 py-1.5 rounded bg-amber-500 text-slate-950 font-bold text-xs"
+                        className="px-2.5 py-1.5 rounded bg-[#D6AD60] text-[#0B0D0E] font-bold text-xs"
                       >
                         Save
                       </button>
                     </div>
                   ) : (
                     <div className="flex items-center justify-between gap-2 pt-1">
-                      <span className="font-mono text-sm text-white select-all break-all">
+                      <span className="font-mono text-sm text-[#F5F5F0] select-all break-all">
                         {contactEmail}
                       </span>
                       <button
                         onClick={handleCopyEmail}
-                        className="p-1.5 rounded-lg bg-carbon-900 border border-zinc-700 hover:border-amber-400 text-zinc-300 hover:text-amber-400 transition-colors shrink-0"
+                        className="p-1.5 rounded-lg bg-[#15191B] border border-[#D6AD60]/20 hover:border-[#D6AD60] text-[#A7AAA8] hover:text-[#D6AD60] transition-colors shrink-0"
                         title="Copy email to clipboard"
                       >
                         {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
@@ -168,25 +168,25 @@ export default function Contact() {
                     </div>
                   )}
 
-                  <div className="text-[10px] font-mono text-zinc-500">
+                  <div className="text-[10px] font-mono text-[#A7AAA8]/60">
                     * Editable contact field with local save.
                   </div>
                 </div>
 
                 {/* College & Location */}
                 <div className="space-y-2">
-                  <div className="flex items-start gap-3 p-3.5 rounded-xl bg-carbon-950 border border-zinc-800/80 text-xs text-zinc-300">
-                    <School className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-3 p-3.5 rounded-xl bg-[#0B0D0E] border border-[#D6AD60]/20 text-xs text-[#A7AAA8]">
+                    <School className="w-4 h-4 text-[#D6AD60] shrink-0 mt-0.5" />
                     <div>
-                      <strong className="text-white block">{personal.college}</strong>
-                      <span className="text-zinc-500 font-mono text-[11px]">Bhopal, Madhya Pradesh, India</span>
+                      <strong className="text-[#F5F5F0] block">{personal.college}</strong>
+                      <span className="text-[#A7AAA8]/60 font-mono text-[11px]">Bhopal, Madhya Pradesh, India</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Social Connect Icons */}
                 <div className="pt-2">
-                  <div className="text-xs font-mono uppercase text-zinc-400 mb-3">
+                  <div className="text-xs font-mono uppercase text-[#A7AAA8] mb-3">
                     Connect On Social Platforms:
                   </div>
                   <div className="flex items-center gap-3">
@@ -194,7 +194,7 @@ export default function Contact() {
                       href={personal.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-carbon-950 border border-zinc-800 hover:border-amber-400 text-zinc-200 hover:text-amber-400 font-mono text-xs font-semibold transition-all"
+                      className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-[#0B0D0E] border border-[#D6AD60]/20 hover:border-[#D6AD60] text-[#F5F5F0] hover:text-[#D6AD60] font-mono text-xs font-semibold transition-all"
                     >
                       <Github className="w-4 h-4" />
                       <span>GitHub</span>
@@ -204,7 +204,7 @@ export default function Contact() {
                       href={personal.linkedinUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-carbon-950 border border-zinc-800 hover:border-amber-400 text-zinc-200 hover:text-amber-400 font-mono text-xs font-semibold transition-all"
+                      className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-[#0B0D0E] border border-[#D6AD60]/20 hover:border-[#D6AD60] text-[#F5F5F0] hover:text-[#D6AD60] font-mono text-xs font-semibold transition-all"
                     >
                       <Linkedin className="w-4 h-4" />
                       <span>LinkedIn</span>
@@ -219,22 +219,22 @@ export default function Contact() {
           {/* Right Column: Validated Contact Form */}
           <div className="lg:col-span-7">
             <Card3D depth={15} maxTilt={6}>
-              <div className="glass-card rounded-2xl p-6 sm:p-8 border border-zinc-800 relative">
+              <div className="matte-card rounded-2xl p-6 sm:p-8 relative">
                 
                 {status === 'success' ? (
                   <div className="py-12 text-center space-y-4">
-                    <div className="w-16 h-16 mx-auto rounded-full bg-emerald-950/80 border-2 border-emerald-400 flex items-center justify-center text-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                    <div className="w-16 h-16 mx-auto rounded-full bg-[#15191B] border-2 border-[#D6AD60] flex items-center justify-center text-[#D6AD60] shadow-[0_0_20px_rgba(214,173,96,0.3)]">
                       <CheckCircle className="w-8 h-8" />
                     </div>
-                    <h3 className="text-2xl font-bold text-white">
+                    <h3 className="text-2xl font-bold text-[#F5F5F0]">
                       Message Dispatched!
                     </h3>
-                    <p className="text-sm text-zinc-300 max-w-md mx-auto">
+                    <p className="text-sm text-[#A7AAA8] max-w-md mx-auto">
                       Thank you for reaching out. Prince Kumar will review your message and reply promptly.
                     </p>
                     <button
                       onClick={() => setStatus('idle')}
-                      className="px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs font-mono mt-4"
+                      className="px-5 py-2.5 rounded-xl bg-[#D6AD60] hover:bg-[#F5E6C8] text-[#0B0D0E] font-bold text-xs font-mono mt-4"
                     >
                       Send Another Message
                     </button>
@@ -245,7 +245,7 @@ export default function Contact() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Name */}
                       <div>
-                        <label className="block text-xs font-mono text-zinc-300 mb-1">
+                        <label className="block text-xs font-mono text-[#F5F5F0] mb-1">
                           Full Name *
                         </label>
                         <input
@@ -256,8 +256,8 @@ export default function Contact() {
                             if (errors.name) setErrors({ ...errors, name: null });
                           }}
                           placeholder="Your name"
-                          className={`w-full px-4 py-2.5 rounded-xl bg-carbon-950 border text-white text-sm focus:outline-none transition-colors ${
-                            errors.name ? 'border-red-500 focus:ring-1 focus:ring-red-500' : 'border-zinc-800 focus:border-amber-400'
+                          className={`w-full px-4 py-2.5 rounded-xl bg-[#0B0D0E] border text-[#F5F5F0] placeholder-[#A7AAA8]/40 text-sm focus:outline-none transition-colors ${
+                            errors.name ? 'border-red-500 focus:ring-1 focus:ring-red-500' : 'border-[#D6AD60]/20 focus:border-[#D6AD60]'
                           }`}
                         />
                         {errors.name && (
@@ -269,7 +269,7 @@ export default function Contact() {
 
                       {/* Email */}
                       <div>
-                        <label className="block text-xs font-mono text-zinc-300 mb-1">
+                        <label className="block text-xs font-mono text-[#F5F5F0] mb-1">
                           Email Address *
                         </label>
                         <input
@@ -280,8 +280,8 @@ export default function Contact() {
                             if (errors.email) setErrors({ ...errors, email: null });
                           }}
                           placeholder="you@domain.com"
-                          className={`w-full px-4 py-2.5 rounded-xl bg-carbon-950 border text-white text-sm focus:outline-none transition-colors ${
-                            errors.email ? 'border-red-500 focus:ring-1 focus:ring-red-500' : 'border-zinc-800 focus:border-amber-400'
+                          className={`w-full px-4 py-2.5 rounded-xl bg-[#0B0D0E] border text-[#F5F5F0] placeholder-[#A7AAA8]/40 text-sm focus:outline-none transition-colors ${
+                            errors.email ? 'border-red-500 focus:ring-1 focus:ring-red-500' : 'border-[#D6AD60]/20 focus:border-[#D6AD60]'
                           }`}
                         />
                         {errors.email && (
@@ -294,7 +294,7 @@ export default function Contact() {
 
                     {/* Subject */}
                     <div>
-                      <label className="block text-xs font-mono text-zinc-300 mb-1">
+                      <label className="block text-xs font-mono text-[#F5F5F0] mb-1">
                         Subject *
                       </label>
                       <input
@@ -305,8 +305,8 @@ export default function Contact() {
                           if (errors.subject) setErrors({ ...errors, subject: null });
                         }}
                         placeholder="e.g. Software Role / Internship Opportunity"
-                        className={`w-full px-4 py-2.5 rounded-xl bg-carbon-950 border text-white text-sm focus:outline-none transition-colors ${
-                          errors.subject ? 'border-red-500 focus:ring-1 focus:ring-red-500' : 'border-zinc-800 focus:border-amber-400'
+                        className={`w-full px-4 py-2.5 rounded-xl bg-[#0B0D0E] border text-[#F5F5F0] placeholder-[#A7AAA8]/40 text-sm focus:outline-none transition-colors ${
+                          errors.subject ? 'border-red-500 focus:ring-1 focus:ring-red-500' : 'border-[#D6AD60]/20 focus:border-[#D6AD60]'
                         }`}
                       />
                       {errors.subject && (
@@ -318,7 +318,7 @@ export default function Contact() {
 
                     {/* Message */}
                     <div>
-                      <label className="block text-xs font-mono text-zinc-300 mb-1">
+                      <label className="block text-xs font-mono text-[#F5F5F0] mb-1">
                         Message *
                       </label>
                       <textarea
@@ -329,8 +329,8 @@ export default function Contact() {
                           if (errors.message) setErrors({ ...errors, message: null });
                         }}
                         placeholder="Write your message here..."
-                        className={`w-full px-4 py-2.5 rounded-xl bg-carbon-950 border text-white text-sm focus:outline-none transition-colors resize-none ${
-                          errors.message ? 'border-red-500 focus:ring-1 focus:ring-red-500' : 'border-zinc-800 focus:border-amber-400'
+                        className={`w-full px-4 py-2.5 rounded-xl bg-[#0B0D0E] border text-[#F5F5F0] placeholder-[#A7AAA8]/40 text-sm focus:outline-none transition-colors resize-none ${
+                          errors.message ? 'border-red-500 focus:ring-1 focus:ring-red-500' : 'border-[#D6AD60]/20 focus:border-[#D6AD60]'
                         }`}
                       />
                       {errors.message && (
@@ -340,11 +340,11 @@ export default function Contact() {
                       )}
                     </div>
 
-                    {/* Submit Button */}
+                    {/* Primary Submit Button: Champagne Gold + Dark text */}
                     <button
                       type="submit"
                       disabled={status === 'submitting'}
-                      className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/15 hover:shadow-amber-500/25 transition-all transform hover:-translate-y-0.5 disabled:opacity-50"
+                      className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#D6AD60] hover:bg-[#F5E6C8] text-[#0B0D0E] font-bold text-sm shadow-lg shadow-[#D6AD60]/15 hover:shadow-[#D6AD60]/25 transition-all transform hover:-translate-y-0.5 disabled:opacity-50"
                     >
                       <Send className="w-4 h-4" />
                       <span>{status === 'submitting' ? 'Transmitting Message...' : 'Send Message'}</span>

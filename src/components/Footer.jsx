@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUp, Github, Linkedin, School } from 'lucide-react';
+import { ArrowUp, Github, Linkedin } from 'lucide-react';
 import { portfolioData } from '../data/portfolioData';
 
 export default function Footer() {
@@ -22,19 +22,19 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="relative bg-[#050608] border-t border-zinc-850 py-12 text-zinc-400 text-xs">
+    <footer className="relative bg-[#0B0D0E] border-t border-[#D6AD60]/20 py-12 text-[#A7AAA8] text-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-zinc-800">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-[#D6AD60]/15">
           
           {/* Logo & College Info */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-carbon-900 border border-amber-500/30 flex items-center justify-center font-mono font-bold text-amber-400">
+            <div className="w-10 h-10 rounded-xl bg-[#15191B] border border-[#D6AD60]/30 flex items-center justify-center font-mono font-bold text-[#D6AD60]">
               &lt;PK/&gt;
             </div>
             <div>
-              <div className="font-bold text-white text-base">Prince Kumar</div>
-              <div className="text-[11px] font-mono text-zinc-400 flex items-center gap-1">
+              <div className="font-bold text-[#F5F5F0] text-base">Prince Kumar</div>
+              <div className="text-[11px] font-mono text-[#A7AAA8] flex items-center gap-1">
                 <span>Lakshami Narayan College Of Technology And Science, Bhopal</span>
               </div>
             </div>
@@ -46,7 +46,7 @@ export default function Footer() {
               <a
                 key={link.name}
                 href={link.href}
-                className="hover:text-amber-400 transition-colors"
+                className="hover:text-[#D6AD60] transition-colors"
               >
                 {link.name}
               </a>
@@ -60,7 +60,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub Profile"
-              className="p-2 rounded-lg bg-carbon-900 border border-zinc-800 hover:border-amber-400 text-zinc-300 hover:text-amber-400 transition-all"
+              className="p-2 rounded-lg bg-[#15191B] border border-[#D6AD60]/20 hover:border-[#D6AD60] text-[#A7AAA8] hover:text-[#D6AD60] transition-all"
             >
               <Github className="w-4 h-4" />
             </a>
@@ -70,14 +70,14 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn Profile"
-              className="p-2 rounded-lg bg-carbon-900 border border-zinc-800 hover:border-amber-400 text-zinc-300 hover:text-amber-400 transition-all"
+              className="p-2 rounded-lg bg-[#15191B] border border-[#D6AD60]/20 hover:border-[#D6AD60] text-[#A7AAA8] hover:text-[#D6AD60] transition-all"
             >
               <Linkedin className="w-4 h-4" />
             </a>
 
             <button
               onClick={scrollToTop}
-              className="p-2 rounded-lg bg-carbon-900 border border-zinc-800 hover:border-amber-400 text-zinc-300 hover:text-amber-400 transition-all"
+              className="p-2 rounded-lg bg-[#15191B] border border-[#D6AD60]/20 hover:border-[#D6AD60] text-[#A7AAA8] hover:text-[#D6AD60] transition-all"
               title="Scroll to Top"
             >
               <ArrowUp className="w-4 h-4" />
@@ -87,12 +87,12 @@ export default function Footer() {
         </div>
 
         {/* Bottom Credits */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-mono text-zinc-500">
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-mono text-[#A7AAA8]/60">
           <div>
             &copy; {new Date().getFullYear()} Prince Kumar &bull; LNCTS Bhopal. All rights reserved.
           </div>
-          <div className="flex items-center gap-1.5 text-zinc-400">
-            <span>Bespoke Engineering &bull; React, Tailwind & 3D Three.js</span>
+          <div className="flex items-center gap-1.5 text-[#A7AAA8]">
+            <span>Matte Black & Champagne Gold &bull; React, Tailwind & 3D Three.js</span>
           </div>
         </div>
 

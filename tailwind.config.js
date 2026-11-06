@@ -8,40 +8,44 @@ export default {
   theme: {
     extend: {
       colors: {
-        carbon: {
-          950: '#07080b',
-          900: '#0c0d12',
-          850: '#11131a',
-          800: '#171923',
-          700: '#232636',
-          600: '#34384d',
+        matte: {
+          main: '#0B0D0E',
+          surface: '#111416',
+          card: '#15191B',
+          hover: '#1B2023',
+          border: 'rgba(214, 173, 96, 0.20)',
         },
-        gold: {
-          400: '#fbbf24',
-          500: '#f59e0b',
-          600: '#d97706',
+        champagne: {
+          DEFAULT: '#D6AD60',
+          50: '#FAF5EC',
+          100: '#F5E6C8',
+          200: '#EDD6A6',
+          300: '#E4C483',
+          400: '#D6AD60',
+          500: '#C59A49',
+          600: '#A98135',
+          700: '#846325',
+          800: '#5F4618',
+          900: '#3D2C0D',
         },
-        titanium: {
-          100: '#f4f4f6',
-          200: '#e4e4e7',
-          300: '#d4d4d8',
-          400: '#a1a1aa',
-          500: '#71717a',
+        palette: {
+          main: '#0B0D0E',
+          surface: '#111416',
+          card: '#15191B',
+          accent: '#D6AD60',
+          cream: '#F5E6C8',
+          text: '#F5F5F0',
+          muted: '#A7AAA8',
+          border: 'rgba(214, 173, 96, 0.20)',
         }
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
-      animation: {
-        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'float-slow': 'float 6s ease-in-out infinite',
-      },
-      keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-8px)' },
-        }
+      boxShadow: {
+        'gold-subtle': '0 0 25px -5px rgba(214, 173, 96, 0.15)',
+        'gold-card': '0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 0 15px -3px rgba(214, 173, 96, 0.08)',
       }
     },
   },

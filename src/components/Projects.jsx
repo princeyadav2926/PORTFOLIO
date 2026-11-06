@@ -9,7 +9,6 @@ import {
   ShoppingCart, 
   Terminal, 
   ArrowUpRight, 
-  Layers, 
   Check, 
   X,
   Info,
@@ -92,26 +91,26 @@ export default function Projects() {
     : mockOpportunities.filter(o => o.type === opportunityFilter);
 
   const getAqiStatus = (pm) => {
-    if (pm <= 60) return { label: 'Moderate', color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30' };
-    if (pm <= 120) return { label: 'Poor', color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/30' };
-    if (pm <= 250) return { label: 'Very Poor', color: 'text-orange-400', bg: 'bg-orange-500/10', border: 'border-orange-500/30' };
-    return { label: 'Severe / Hazardous', color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/30' };
+    if (pm <= 60) return { label: 'Moderate', color: 'text-[#F5E6C8]', bg: 'bg-[#15191B]', border: 'border-[#D6AD60]/30' };
+    if (pm <= 120) return { label: 'Poor', color: 'text-[#D6AD60]', bg: 'bg-[#15191B]', border: 'border-[#D6AD60]/40' };
+    if (pm <= 250) return { label: 'Very Poor', color: 'text-[#E4C483]', bg: 'bg-[#15191B]', border: 'border-[#D6AD60]/50' };
+    return { label: 'Severe / Alert', color: 'text-[#FAF5EC]', bg: 'bg-[#15191B]', border: 'border-[#D6AD60]/70' };
   };
 
   return (
-    <section id="projects" className="py-24 relative overflow-hidden bg-[#090b10] border-t border-zinc-800">
+    <section id="projects" className="py-24 relative overflow-hidden bg-[#111416] border-t border-[#D6AD60]/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-carbon-900 border border-zinc-800 text-amber-400 text-xs font-mono tracking-wider uppercase">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#15191B] border border-[#D6AD60]/20 text-[#D6AD60] text-xs font-mono tracking-wider uppercase">
             <FolderGit2 className="w-3.5 h-3.5" />
             <span>Featured Software Engineering</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#F5F5F0] tracking-tight">
             Featured <span className="text-gradient-gold">Projects</span>
           </h2>
-          <p className="text-zinc-400 text-sm sm:text-base">
+          <p className="text-[#A7AAA8] text-sm sm:text-base">
             Architected and developed solutions focusing on career intelligence, environmental analytics, and core algorithmic problem solving.
           </p>
         </div>
@@ -121,52 +120,52 @@ export default function Projects() {
           {projects.map((proj) => {
             const Icon = getProjectIcon(proj.id);
             return (
-              <Card3D key={proj.id} depth={20} maxTilt={7}>
-                <div className="glass-card rounded-2xl p-6 sm:p-8 border border-zinc-800 hover:border-amber-500/40 group flex flex-col justify-between h-full relative overflow-hidden">
+              <Card3D key={proj.id} depth={20} maxTilt={6}>
+                <div className="matte-card rounded-2xl p-6 sm:p-8 group flex flex-col justify-between h-full relative overflow-hidden">
                   
                   {/* Subtle top indicator bar */}
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-500/30 to-transparent group-hover:via-amber-400 transition-all" />
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#D6AD60]/40 to-transparent group-hover:via-[#D6AD60] transition-all" />
 
                   {/* Top Meta info */}
                   <div>
                     <div className="flex items-start justify-between gap-4 mb-4">
                       <div className="flex items-center gap-3">
-                        <div className="p-3 rounded-xl bg-carbon-950 border border-zinc-800 text-amber-400 group-hover:scale-110 group-hover:border-amber-400 transition-all">
+                        <div className="p-3 rounded-xl bg-[#0B0D0E] border border-[#D6AD60]/20 text-[#D6AD60] group-hover:scale-105 group-hover:border-[#D6AD60]/50 transition-all">
                           <Icon className="w-6 h-6" />
                         </div>
                         <div>
-                          <span className="text-[11px] font-mono uppercase tracking-wider text-amber-400 block">
+                          <span className="text-[11px] font-mono uppercase tracking-wider text-[#D6AD60] block">
                             {proj.category}
                           </span>
-                          <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:text-amber-300 transition-colors">
+                          <h3 className="text-xl sm:text-2xl font-bold text-[#F5F5F0] group-hover:text-[#D6AD60] transition-colors">
                             {proj.title}
                           </h3>
                         </div>
                       </div>
-                      <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-carbon-900 border border-zinc-800 text-zinc-300 shrink-0">
+                      <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-[#0B0D0E] border border-[#D6AD60]/20 text-[#A7AAA8] shrink-0">
                         {proj.status}
                       </span>
                     </div>
 
-                    <p className="text-sm text-zinc-300 leading-relaxed mb-6">
+                    <p className="text-sm text-[#A7AAA8] leading-relaxed mb-6">
                       {proj.description}
                     </p>
 
                     {/* Feature Cards */}
                     <div className="mb-6 space-y-2">
-                      <div className="text-xs font-mono text-amber-400/90 uppercase tracking-wider">
+                      <div className="text-xs font-mono text-[#D6AD60] uppercase tracking-wider">
                         Core Capabilities:
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {proj.features.slice(0, 4).map((feat, fIdx) => (
                           <div
                             key={fIdx}
-                            className="p-2.5 rounded-lg bg-carbon-950 border border-zinc-800/80 text-xs text-zinc-300 flex items-start gap-2"
+                            className="p-2.5 rounded-lg bg-[#0B0D0E] border border-[#D6AD60]/15 text-xs text-[#A7AAA8] flex items-start gap-2"
                           >
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1 shrink-0" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#D6AD60] mt-1 shrink-0" />
                             <div>
-                              <span className="font-semibold text-zinc-200 block">{feat.title}</span>
-                              <span className="text-[11px] text-zinc-400 line-clamp-1">{feat.desc}</span>
+                              <span className="font-semibold text-[#F5F5F0] block">{feat.title}</span>
+                              <span className="text-[11px] text-[#A7AAA8] line-clamp-1">{feat.desc}</span>
                             </div>
                           </div>
                         ))}
@@ -178,7 +177,7 @@ export default function Projects() {
                       {proj.technologies.map((tech) => (
                         <span
                           key={tech}
-                          className="px-2.5 py-0.5 rounded-md text-xs font-mono bg-carbon-950 border border-zinc-800 text-zinc-300"
+                          className="px-2.5 py-0.5 rounded-md text-xs font-mono bg-[#0B0D0E] border border-[#D6AD60]/15 text-[#F5E6C8]"
                         >
                           {tech}
                         </span>
@@ -187,10 +186,10 @@ export default function Projects() {
                   </div>
 
                   {/* Bottom Action Footer */}
-                  <div className="pt-4 border-t border-zinc-800/80 flex items-center justify-between gap-3">
+                  <div className="pt-4 border-t border-[#D6AD60]/15 flex items-center justify-between gap-3">
                     <button
                       onClick={() => setSelectedProject(proj)}
-                      className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-amber-400 hover:text-amber-300 transition-colors"
+                      className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#D6AD60] hover:text-[#F5E6C8] transition-colors"
                     >
                       <Info className="w-4 h-4" />
                       <span>Inspect Details & Demo</span>
@@ -201,11 +200,11 @@ export default function Projects() {
                         href={proj.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-carbon-900 border border-zinc-700 hover:border-amber-400 text-xs text-zinc-200 hover:text-amber-400 font-mono transition-all"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0B0D0E] border border-[#D6AD60]/30 hover:border-[#D6AD60] text-xs text-[#F5F5F0] hover:text-[#D6AD60] font-mono transition-all"
                       >
                         <Github className="w-3.5 h-3.5" />
                         <span>Source Code</span>
-                        <ArrowUpRight className="w-3 h-3 text-amber-400" />
+                        <ArrowUpRight className="w-3 h-3 text-[#D6AD60]" />
                       </a>
                     </div>
                   </div>
@@ -221,42 +220,42 @@ export default function Projects() {
       {/* Deep-Dive Project Modal with Interactive Simulator */}
       {selectedProject && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-          <div className="relative w-full max-w-3xl bg-carbon-900 border border-amber-500/30 rounded-2xl p-6 sm:p-8 shadow-2xl overflow-y-auto max-h-[90vh]">
+          <div className="relative w-full max-w-3xl bg-[#15191B] border border-[#D6AD60]/30 rounded-2xl p-6 sm:p-8 shadow-2xl overflow-y-auto max-h-[90vh]">
             
             {/* Modal Header */}
-            <div className="flex items-start justify-between gap-4 mb-4 pb-4 border-b border-zinc-800">
+            <div className="flex items-start justify-between gap-4 mb-4 pb-4 border-b border-[#D6AD60]/20">
               <div>
-                <span className="text-xs font-mono uppercase text-amber-400 tracking-wider">
+                <span className="text-xs font-mono uppercase text-[#D6AD60] tracking-wider">
                   {selectedProject.category}
                 </span>
-                <h3 className="text-2xl font-bold text-white mt-1">
+                <h3 className="text-2xl font-bold text-[#F5F5F0] mt-1">
                   {selectedProject.title}
                 </h3>
               </div>
               <button
                 onClick={() => setSelectedProject(null)}
-                className="p-1.5 rounded-lg bg-carbon-800 text-zinc-400 hover:text-white transition-colors"
+                className="p-1.5 rounded-lg bg-[#0B0D0E] text-[#A7AAA8] hover:text-[#F5F5F0] transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Modal Body */}
-            <div className="space-y-6 text-sm text-zinc-300">
+            <div className="space-y-6 text-sm text-[#A7AAA8]">
               <div>
-                <h4 className="text-xs font-mono uppercase text-zinc-400 mb-1">Project Synopsis</h4>
-                <p className="leading-relaxed">{selectedProject.description}</p>
+                <h4 className="text-xs font-mono uppercase text-[#D6AD60] mb-1">Project Synopsis</h4>
+                <p className="leading-relaxed text-[#F5F5F0]">{selectedProject.description}</p>
               </div>
 
               {/* INTERACTIVE DEMO SIMULATOR */}
-              <div className="p-4 rounded-xl bg-carbon-950 border border-zinc-800 space-y-3">
-                <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
-                  <span className="text-xs font-mono text-amber-400 font-semibold flex items-center gap-1.5">
+              <div className="p-4 rounded-xl bg-[#0B0D0E] border border-[#D6AD60]/20 space-y-3">
+                <div className="flex items-center justify-between border-b border-[#D6AD60]/15 pb-2">
+                  <span className="text-xs font-mono text-[#D6AD60] font-semibold flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5" />
                     Interactive Feature Simulation
                   </span>
-                  <span className="text-[10px] font-mono text-zinc-500">
-                    Live Prototype
+                  <span className="text-[10px] font-mono text-[#A7AAA8]">
+                    Live Architecture Prototype
                   </span>
                 </div>
 
@@ -269,7 +268,7 @@ export default function Projects() {
                           key={cat}
                           onClick={() => setOpportunityFilter(cat)}
                           className={`px-2.5 py-1 rounded text-xs font-mono transition-colors ${
-                            opportunityFilter === cat ? 'bg-amber-500 text-slate-950 font-bold' : 'bg-carbon-900 text-zinc-300 border border-zinc-800'
+                            opportunityFilter === cat ? 'bg-[#D6AD60] text-[#0B0D0E] font-bold' : 'bg-[#15191B] text-[#A7AAA8] border border-[#D6AD60]/20'
                           }`}
                         >
                           {cat}
@@ -278,11 +277,11 @@ export default function Projects() {
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
                       {filteredOpportunities.map((opp, idx) => (
-                        <div key={idx} className="p-2.5 rounded-lg bg-carbon-900 border border-zinc-800 text-xs">
-                          <div className="font-semibold text-white">{opp.title}</div>
-                          <div className="flex items-center justify-between text-[11px] text-amber-400 font-mono mt-1">
+                        <div key={idx} className="p-2.5 rounded-lg bg-[#15191B] border border-[#D6AD60]/20 text-xs">
+                          <div className="font-semibold text-[#F5F5F0]">{opp.title}</div>
+                          <div className="flex items-center justify-between text-[11px] text-[#D6AD60] font-mono mt-1">
                             <span>{opp.deadline}</span>
-                            <span className="text-zinc-400">{opp.match}</span>
+                            <span className="text-[#A7AAA8]">{opp.match}</span>
                           </div>
                         </div>
                       ))}
@@ -295,7 +294,7 @@ export default function Projects() {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between text-xs font-mono">
                       <span>Simulate Delhi NCR PM2.5 (µg/m³):</span>
-                      <span className="text-amber-400 font-bold">{pm25Value} µg/m³</span>
+                      <span className="text-[#D6AD60] font-bold">{pm25Value} µg/m³</span>
                     </div>
                     <input
                       type="range"
@@ -303,17 +302,17 @@ export default function Projects() {
                       max="450"
                       value={pm25Value}
                       onChange={(e) => setPm25Value(Number(e.target.value))}
-                      className="w-full accent-amber-400 cursor-pointer"
+                      className="w-full accent-[#D6AD60] cursor-pointer"
                     />
                     {(() => {
                       const stat = getAqiStatus(pm25Value);
                       return (
                         <div className={`p-3 rounded-lg ${stat.bg} ${stat.border} border flex items-center justify-between text-xs`}>
                           <div>
-                            <span className="font-mono text-zinc-400 block">Forecasted Risk:</span>
+                            <span className="font-mono text-[#A7AAA8] block">Forecasted Risk:</span>
                             <span className={`font-bold ${stat.color} text-sm`}>{stat.label}</span>
                           </div>
-                          <div className="text-right text-[11px] font-mono text-zinc-400">
+                          <div className="text-right text-[11px] font-mono text-[#A7AAA8]">
                             Wind: 14 km/h NW<br />Smog Inversion: {pm25Value > 150 ? 'High' : 'Low'}
                           </div>
                         </div>
@@ -325,20 +324,20 @@ export default function Projects() {
                 {/* 3. SMART SHOPPING */}
                 {selectedProject.id === 'smart-shopping' && (
                   <div className="space-y-3">
-                    <div className="text-xs text-zinc-300">
+                    <div className="text-xs text-[#A7AAA8]">
                       Simulated Instant Cart Calculation:
                     </div>
                     <div className="space-y-2">
                       {cartItems.map((item) => (
-                        <div key={item.id} className="flex items-center justify-between p-2 rounded bg-carbon-900 text-xs border border-zinc-800">
-                          <span className="text-white font-medium">{item.name}</span>
-                          <span className="font-mono text-amber-400">${item.price} &times; {item.qty}</span>
+                        <div key={item.id} className="flex items-center justify-between p-2 rounded bg-[#15191B] text-xs border border-[#D6AD60]/20">
+                          <span className="text-[#F5F5F0] font-medium">{item.name}</span>
+                          <span className="font-mono text-[#D6AD60]">${item.price} &times; {item.qty}</span>
                         </div>
                       ))}
                     </div>
-                    <div className="flex items-center justify-between pt-2 border-t border-zinc-800 text-xs font-mono">
-                      <span className="text-zinc-400">Total Price:</span>
-                      <span className="font-bold text-white text-sm">
+                    <div className="flex items-center justify-between pt-2 border-t border-[#D6AD60]/20 text-xs font-mono">
+                      <span className="text-[#A7AAA8]">Total Price:</span>
+                      <span className="font-bold text-[#F5F5F0] text-sm">
                         ${cartItems.reduce((acc, i) => acc + i.price * i.qty, 0)}.00
                       </span>
                     </div>
@@ -349,18 +348,18 @@ export default function Projects() {
                 {selectedProject.id === 'dsa-programming' && (
                   <div className="space-y-3">
                     <div className="flex items-center justify-between text-xs font-mono">
-                      <span>Search target: <strong className="text-amber-400">{targetVal}</strong></span>
+                      <span>Search target: <strong className="text-[#D6AD60]">{targetVal}</strong></span>
                       <div className="flex items-center gap-2">
                         <button
                           onClick={handleNextDsaStep}
                           disabled={dsaFound || lowPtr > highPtr}
-                          className="px-2 py-1 rounded bg-amber-500 text-slate-950 font-bold text-xs disabled:opacity-40"
+                          className="px-2.5 py-1 rounded bg-[#D6AD60] text-[#0B0D0E] font-bold text-xs disabled:opacity-40"
                         >
                           {dsaFound ? "Target Found!" : "Step >"}
                         </button>
                         <button
                           onClick={handleResetDsa}
-                          className="p-1 rounded bg-carbon-800 text-zinc-400 hover:text-white"
+                          className="p-1 rounded bg-[#15191B] text-[#A7AAA8] hover:text-[#F5F5F0]"
                           title="Reset Search"
                         >
                           <RotateCcw className="w-3.5 h-3.5" />
@@ -377,21 +376,21 @@ export default function Projects() {
                             key={idx}
                             className={`px-2 py-1.5 rounded text-xs font-mono border text-center transition-all ${
                               isTarget
-                                ? 'bg-emerald-500 text-slate-950 font-bold border-emerald-400 ring-2 ring-emerald-400'
+                                ? 'bg-[#D6AD60] text-[#0B0D0E] font-bold border-[#F5E6C8] ring-1 ring-[#D6AD60]'
                                 : isMid
-                                ? 'bg-amber-500/20 text-amber-300 border-amber-400 font-bold'
+                                ? 'bg-[#D6AD60]/20 text-[#D6AD60] border-[#D6AD60] font-bold'
                                 : idx >= lowPtr && idx <= highPtr
-                                ? 'bg-carbon-900 text-white border-zinc-700'
-                                : 'bg-carbon-950 text-zinc-600 border-zinc-900'
+                                ? 'bg-[#15191B] text-[#F5F5F0] border-[#D6AD60]/20'
+                                : 'bg-[#0B0D0E] text-[#A7AAA8]/40 border-transparent'
                             }`}
                           >
                             {val}
-                            {isMid && <span className="block text-[8px] text-amber-400">mid</span>}
+                            {isMid && <span className="block text-[8px] text-[#D6AD60]">mid</span>}
                           </div>
                         );
                       })}
                     </div>
-                    <div className="text-[11px] font-mono text-zinc-400">
+                    <div className="text-[11px] font-mono text-[#A7AAA8]">
                       Step {dsaStep}: low={lowPtr}, mid={midPtr}, high={highPtr} &bull; Time Complexity: O(log n)
                     </div>
                   </div>
@@ -401,12 +400,12 @@ export default function Projects() {
 
               {selectedProject.coreConcept && (
                 <div>
-                  <h4 className="text-xs font-mono uppercase text-amber-400 mb-2">Core Concept & Architecture</h4>
+                  <h4 className="text-xs font-mono uppercase text-[#D6AD60] mb-2">Core Concept & Architecture</h4>
                   <ul className="space-y-1.5">
                     {selectedProject.coreConcept.map((concept, idx) => (
                       <li key={idx} className="flex items-start gap-2">
-                        <Check className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                        <span>{concept}</span>
+                        <Check className="w-4 h-4 text-[#D6AD60] shrink-0 mt-0.5" />
+                        <span className="text-[#F5F5F0]">{concept}</span>
                       </li>
                     ))}
                   </ul>
@@ -414,22 +413,22 @@ export default function Projects() {
               )}
 
               <div>
-                <h4 className="text-xs font-mono uppercase text-amber-400 mb-2">Feature Breakdown</h4>
+                <h4 className="text-xs font-mono uppercase text-[#D6AD60] mb-2">Feature Breakdown</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {selectedProject.features.map((feat, idx) => (
-                    <div key={idx} className="p-3 rounded-xl bg-carbon-950 border border-zinc-800">
-                      <div className="font-semibold text-white text-xs mb-1">{feat.title}</div>
-                      <div className="text-zinc-400 text-xs leading-normal">{feat.desc}</div>
+                    <div key={idx} className="p-3 rounded-xl bg-[#0B0D0E] border border-[#D6AD60]/20">
+                      <div className="font-semibold text-[#F5F5F0] text-xs mb-1">{feat.title}</div>
+                      <div className="text-[#A7AAA8] text-xs leading-normal">{feat.desc}</div>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div>
-                <h4 className="text-xs font-mono uppercase text-zinc-400 mb-2">Technology Stack</h4>
+                <h4 className="text-xs font-mono uppercase text-[#D6AD60] mb-2">Technology Stack</h4>
                 <div className="flex flex-wrap gap-2">
                   {selectedProject.technologies.map((t) => (
-                    <span key={t} className="px-3 py-1 rounded-md bg-carbon-950 text-amber-300 font-mono text-xs border border-zinc-800">
+                    <span key={t} className="px-3 py-1 rounded-md bg-[#0B0D0E] text-[#F5E6C8] font-mono text-xs border border-[#D6AD60]/20">
                       {t}
                     </span>
                   ))}
@@ -438,15 +437,15 @@ export default function Projects() {
             </div>
 
             {/* Modal Footer */}
-            <div className="mt-8 pt-4 border-t border-zinc-800 flex items-center justify-between">
-              <span className="text-xs font-mono text-zinc-500">
+            <div className="mt-8 pt-4 border-t border-[#D6AD60]/20 flex items-center justify-between">
+              <span className="text-xs font-mono text-[#A7AAA8]">
                 Verified developer repository
               </span>
               <a
                 href={selectedProject.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs font-mono transition-all"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#D6AD60] hover:bg-[#F5E6C8] text-[#0B0D0E] font-bold text-xs font-mono transition-all"
               >
                 <Github className="w-4 h-4" />
                 <span>Open On GitHub</span>

@@ -2,9 +2,9 @@ import React, { useRef, useState } from 'react';
 
 /**
  * Card3D provides realistic 3D perspective tilt and dynamic lighting glare
- * with refined warm metallic sheen.
+ * with refined champagne gold sheen (#D6AD60).
  */
-export default function Card3D({ children, className = '', depth = 20, maxTilt = 12 }) {
+export default function Card3D({ children, className = '', depth = 20, maxTilt = 10 }) {
   const cardRef = useRef(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [glare, setGlare] = useState({ x: 50, y: 50, opacity: 0 });
@@ -25,7 +25,7 @@ export default function Card3D({ children, className = '', depth = 20, maxTilt =
     setGlare({
       x: (x / rect.width) * 100,
       y: (y / rect.height) * 100,
-      opacity: 0.18,
+      opacity: 0.16,
     });
   };
 
@@ -44,12 +44,12 @@ export default function Card3D({ children, className = '', depth = 20, maxTilt =
         transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateZ(0px)`,
       }}
     >
-      {/* Specular Warm Sheen */}
+      {/* Specular Champagne Gold Sheen */}
       <div
         className="pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-300 z-30"
         style={{
           opacity: glare.opacity,
-          background: `radial-gradient(circle at ${glare.x}% ${glare.y}%, rgba(251, 191, 36, 0.22) 0%, rgba(245, 158, 11, 0.05) 45%, transparent 75%)`,
+          background: `radial-gradient(circle at ${glare.x}% ${glare.y}%, rgba(214, 173, 96, 0.20) 0%, rgba(245, 230, 200, 0.05) 45%, transparent 75%)`,
         }}
       />
       {children}

@@ -14,7 +14,6 @@ export default function GithubDashboard() {
 
   const [repos, setRepos] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   const fallbackRepos = [
     {
@@ -56,7 +55,6 @@ export default function GithubDashboard() {
 
     async function fetchGithubData() {
       try {
-        setLoading(true);
         const [userRes, reposRes] = await Promise.allSettled([
           fetch(`https://api.github.com/users/${username}`),
           fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`)
@@ -101,8 +99,6 @@ export default function GithubDashboard() {
           public_repos: fallbackRepos.length,
           html_url: profileUrl,
         });
-      } finally {
-        if (isMounted) setLoading(false);
       }
     }
 
@@ -113,35 +109,24 @@ export default function GithubDashboard() {
     };
   }, [username]);
 
-  const getLanguageColor = (lang) => {
-    switch (lang) {
-      case 'JavaScript':
-        return 'text-amber-400 bg-amber-400/10 border-amber-400/30';
-      case 'C++':
-        return 'text-blue-400 bg-blue-400/10 border-blue-400/30';
-      case 'Java':
-        return 'text-orange-400 bg-orange-400/10 border-orange-400/30';
-      case 'Python':
-        return 'text-emerald-400 bg-emerald-400/10 border-emerald-400/30';
-      default:
-        return 'text-zinc-300 bg-zinc-800 border-zinc-700';
-    }
+  const getLanguageColor = () => {
+    return 'text-[#D6AD60] bg-[#0B0D0E] border-[#D6AD60]/30';
   };
 
   return (
-    <section id="github" className="py-24 relative overflow-hidden bg-[#07080b] border-t border-zinc-800 engineering-grid">
+    <section id="github" className="py-24 relative overflow-hidden bg-[#0B0D0E] border-t border-[#D6AD60]/20 subtle-matte-grid">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-carbon-900 border border-zinc-800 text-amber-400 text-xs font-mono tracking-wider uppercase">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#15191B] border border-[#D6AD60]/20 text-[#D6AD60] text-xs font-mono tracking-wider uppercase">
             <Github className="w-3.5 h-3.5" />
             <span>Open Source Hub</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#F5F5F0] tracking-tight">
             GitHub <span className="text-gradient-gold">Developer Dashboard</span>
           </h2>
-          <p className="text-zinc-400 text-sm sm:text-base">
+          <p className="text-[#A7AAA8] text-sm sm:text-base">
             Live integration tracking public repositories, programming languages, and version control activity.
           </p>
         </div>
@@ -149,23 +134,23 @@ export default function GithubDashboard() {
         {/* GitHub Profile Overview Card */}
         <div className="max-w-4xl mx-auto mb-12">
           <Card3D depth={15} maxTilt={6}>
-            <div className="glass-card rounded-2xl p-6 sm:p-8 border border-zinc-800 hover:border-amber-500/40 relative">
+            <div className="matte-card rounded-2xl p-6 sm:p-8 relative">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
                 
                 <div className="flex items-center gap-4 text-center sm:text-left">
-                  <div className="w-16 h-16 rounded-2xl bg-carbon-950 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-lg shrink-0">
+                  <div className="w-16 h-16 rounded-2xl bg-[#0B0D0E] border border-[#D6AD60]/30 flex items-center justify-center text-[#D6AD60] shadow-lg shrink-0">
                     <Github className="w-9 h-9" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2 justify-center sm:justify-start">
-                      <h3 className="text-xl font-bold text-white">
+                      <h3 className="text-xl font-bold text-[#F5F5F0]">
                         {userInfo?.name || "Prince Kumar"}
                       </h3>
-                      <span className="text-xs font-mono text-amber-400 bg-carbon-950 px-2.5 py-0.5 rounded-full border border-zinc-800">
+                      <span className="text-xs font-mono text-[#D6AD60] bg-[#0B0D0E] px-2.5 py-0.5 rounded-full border border-[#D6AD60]/20">
                         @{username}
                       </span>
                     </div>
-                    <p className="text-xs sm:text-sm text-zinc-300 mt-1 max-w-md">
+                    <p className="text-xs sm:text-sm text-[#A7AAA8] mt-1 max-w-md">
                       {userInfo?.bio || "B.Tech CSE Student at LNCTS Bhopal & Aspiring Full Stack Developer."}
                     </p>
                   </div>
@@ -176,7 +161,7 @@ export default function GithubDashboard() {
                     href={profileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs font-mono shadow-md transition-all"
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#D6AD60] hover:bg-[#F5E6C8] text-[#0B0D0E] font-bold text-xs font-mono shadow-md transition-all"
                   >
                     <span>View GitHub Profile</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
@@ -186,12 +171,12 @@ export default function GithubDashboard() {
               </div>
 
               {/* Verified Integrity Note */}
-              <div className="mt-6 pt-4 border-t border-zinc-800/80 flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-zinc-400">
-                <span className="flex items-center gap-1.5 text-amber-300">
-                  <ShieldCheck className="w-4 h-4 text-amber-400" />
+              <div className="mt-6 pt-4 border-t border-[#D6AD60]/15 flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-[#A7AAA8]">
+                <span className="flex items-center gap-1.5 text-[#D6AD60]">
+                  <ShieldCheck className="w-4 h-4 text-[#D6AD60]" />
                   Verified public repositories without fabricated metrics.
                 </span>
-                <span className="text-zinc-500">
+                <span className="text-[#A7AAA8]/60">
                   Target: github.com/{username}
                 </span>
               </div>
@@ -202,30 +187,30 @@ export default function GithubDashboard() {
         {/* Repositories Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
           {repos.map((repo, idx) => (
-            <Card3D key={repo.name || idx} depth={12} maxTilt={7}>
-              <div className="glass-card rounded-xl p-5 border border-zinc-800 hover:border-amber-500/40 group h-full flex flex-col justify-between">
+            <Card3D key={repo.name || idx} depth={12} maxTilt={6}>
+              <div className="matte-card rounded-xl p-5 group h-full flex flex-col justify-between">
                 <div>
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <div className="flex items-center gap-2">
-                      <FolderGit2 className="w-4 h-4 text-amber-400" />
-                      <h4 className="font-bold text-white text-base group-hover:text-amber-300 transition-colors">
+                      <FolderGit2 className="w-4 h-4 text-[#D6AD60]" />
+                      <h4 className="font-bold text-[#F5F5F0] text-base group-hover:text-[#D6AD60] transition-colors">
                         {repo.name}
                       </h4>
                     </div>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-carbon-950 border border-zinc-800 text-zinc-400">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#0B0D0E] border border-[#D6AD60]/20 text-[#A7AAA8]">
                       Public
                     </span>
                   </div>
 
-                  <p className="text-xs text-zinc-400 line-clamp-2 mb-4 leading-relaxed">
+                  <p className="text-xs text-[#A7AAA8] line-clamp-2 mb-4 leading-relaxed">
                     {repo.description || "Project repository by Prince Kumar."}
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-zinc-800/80 flex items-center justify-between">
+                <div className="pt-3 border-t border-[#D6AD60]/15 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     {repo.language && (
-                      <span className={`text-[11px] font-mono px-2 py-0.5 rounded border ${getLanguageColor(repo.language)}`}>
+                      <span className={`text-[11px] font-mono px-2 py-0.5 rounded border ${getLanguageColor()}`}>
                         {repo.language}
                       </span>
                     )}
@@ -235,7 +220,7 @@ export default function GithubDashboard() {
                     href={repo.html_url || profileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-xs font-mono text-amber-400 hover:text-amber-300 font-semibold"
+                    className="inline-flex items-center gap-1 text-xs font-mono text-[#D6AD60] hover:text-[#F5E6C8] font-semibold"
                   >
                     <span>Inspect</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />

@@ -10,11 +10,10 @@ import {
   Mail, 
   Github, 
   Linkedin, 
-  GraduationCap, 
   Award, 
   Copy, 
-  Check,
-  School
+  Check, 
+  School 
 } from 'lucide-react';
 import { portfolioData } from '../data/portfolioData';
 
@@ -189,43 +188,43 @@ export default function CommandPalette({ isOpen, onClose, onOpenResume }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-black/85 backdrop-blur-md">
-      <div className="relative w-full max-w-xl bg-carbon-900 border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[75vh]">
+      <div className="relative w-full max-w-xl bg-[#15191B] border border-[#D6AD60]/25 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[75vh]">
         
         {/* Search Input Bar */}
-        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-zinc-800 bg-carbon-950">
-          <Search className="w-5 h-5 text-amber-400 shrink-0" />
+        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-[#D6AD60]/15 bg-[#0B0D0E]">
+          <Search className="w-5 h-5 text-[#D6AD60] shrink-0" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search commands or sections (e.g. 'LNCTS', 'DSA', 'Resume')..."
-            className="w-full bg-transparent text-white placeholder-zinc-500 text-sm focus:outline-none font-mono"
+            className="w-full bg-transparent text-[#F5F5F0] placeholder-[#A7AAA8]/40 text-sm focus:outline-none font-mono"
             autoFocus
           />
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="p-1 rounded text-zinc-500 hover:text-white"
+              className="p-1 rounded text-[#A7AAA8] hover:text-[#F5F5F0]"
             >
               <X className="w-4 h-4" />
             </button>
           )}
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-carbon-800 text-zinc-400 border border-zinc-700 hidden sm:inline-block">
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#111416] text-[#A7AAA8] border border-[#D6AD60]/20 hidden sm:inline-block">
             ESC
           </span>
         </div>
 
         {/* Action List */}
-        <div className="overflow-y-auto p-2 divide-y divide-zinc-800/50">
+        <div className="overflow-y-auto p-2 divide-y divide-[#D6AD60]/10">
           {copied && (
-            <div className="p-3 mx-2 my-1 rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 text-xs font-mono flex items-center gap-2">
-              <Check className="w-4 h-4 text-emerald-400" />
+            <div className="p-3 mx-2 my-1 rounded-xl bg-[#111416] border border-[#D6AD60]/40 text-[#D6AD60] text-xs font-mono flex items-center gap-2">
+              <Check className="w-4 h-4 text-[#D6AD60]" />
               <span>Email copied to clipboard: prince.cse.dev@gmail.com</span>
             </div>
           )}
 
           {filtered.length === 0 ? (
-            <div className="p-8 text-center text-zinc-500 text-sm font-mono">
+            <div className="p-8 text-center text-[#A7AAA8] text-sm font-mono">
               No matching commands found.
             </div>
           ) : (
@@ -235,24 +234,24 @@ export default function CommandPalette({ isOpen, onClose, onOpenResume }) {
                 <button
                   key={item.id}
                   onClick={item.run}
-                  className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-carbon-800/80 text-left transition-colors group"
+                  className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-[#111416] text-left transition-colors group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-carbon-950 border border-zinc-800 text-amber-400 group-hover:border-amber-400 transition-colors">
+                    <div className="p-2 rounded-lg bg-[#0B0D0E] border border-[#D6AD60]/20 text-[#D6AD60] group-hover:border-[#D6AD60] transition-colors">
                       <Icon className="w-4 h-4" />
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-white group-hover:text-amber-300 transition-colors">
+                      <div className="text-sm font-semibold text-[#F5F5F0] group-hover:text-[#D6AD60] transition-colors">
                         {item.title}
                       </div>
                       {item.subtitle && (
-                        <div className="text-xs text-zinc-400 line-clamp-1">
+                        <div className="text-xs text-[#A7AAA8] line-clamp-1">
                           {item.subtitle}
                         </div>
                       )}
                     </div>
                   </div>
-                  <span className="text-[10px] font-mono text-zinc-500 px-2 py-0.5 rounded bg-carbon-950 border border-zinc-800 shrink-0">
+                  <span className="text-[10px] font-mono text-[#A7AAA8] px-2 py-0.5 rounded bg-[#0B0D0E] border border-[#D6AD60]/15 shrink-0">
                     {item.category}
                   </span>
                 </button>
@@ -262,7 +261,7 @@ export default function CommandPalette({ isOpen, onClose, onOpenResume }) {
         </div>
 
         {/* Footer */}
-        <div className="px-4 py-2 bg-carbon-950 border-t border-zinc-800 flex items-center justify-between text-[11px] font-mono text-zinc-500">
+        <div className="px-4 py-2 bg-[#0B0D0E] border-t border-[#D6AD60]/15 flex items-center justify-between text-[11px] font-mono text-[#A7AAA8]">
           <span>Prince Kumar &bull; LNCTS Bhopal</span>
           <span>Press ↵ to select</span>
         </div>
