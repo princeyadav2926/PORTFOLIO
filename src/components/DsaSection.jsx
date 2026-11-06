@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { portfolioData } from '../data/portfolioData';
 import Card3D from './Card3D';
+import TechLogo from './TechLogo';
 
 export default function DsaSection() {
   const { dsaSection } = portfolioData;
@@ -28,6 +29,17 @@ export default function DsaSection() {
           <p className="text-[#A7AAA8] text-sm sm:text-base">
             {dsaSection.description}
           </p>
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+            <span className="text-xs font-mono text-[#A7AAA8]/70">Implemented in:</span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#15191B] border border-[#D6AD60]/20 text-xs font-mono text-[#F5E6C8]">
+              <TechLogo name="c++" size={14} className="w-3.5 h-3.5" />
+              <span>C++</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#15191B] border border-[#D6AD60]/20 text-xs font-mono text-[#F5E6C8]">
+              <TechLogo name="java" size={14} className="w-3.5 h-3.5" />
+              <span>Java</span>
+            </span>
+          </div>
         </div>
 
         {/* 10 Interactive DSA Topic Cards */}

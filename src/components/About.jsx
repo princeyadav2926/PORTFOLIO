@@ -1,7 +1,8 @@
 import React from 'react';
-import { User, Code, Cpu, Target, Compass, Sparkles } from 'lucide-react';
+import { User, Code, Cpu, Target, Compass, Sparkles, School } from 'lucide-react';
 import { portfolioData } from '../data/portfolioData';
 import Card3D from './Card3D';
+import TechLogo from './TechLogo';
 
 export default function About() {
   const { intro } = portfolioData;
@@ -74,23 +75,23 @@ export default function About() {
                 </p>
               </div>
 
-              {/* Developer Philosophy checklist */}
+              {/* Developer Focus Badges with Logos */}
               <div className="pt-4 border-t border-[#D6AD60]/15 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono text-[#A7AAA8]">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#D6AD60]" />
+                  <TechLogo name="c++" size={15} className="w-4 h-4 shrink-0" />
                   <span>C++ & Java Core Programming</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#D6AD60]" />
+                  <TechLogo name="react" size={15} className="w-4 h-4 shrink-0" />
                   <span>React.js & Node.js Full Stack</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#D6AD60]" />
-                  <span>Continuous Algorithmic Practice</span>
+                  <TechLogo name="python" size={15} className="w-4 h-4 shrink-0" />
+                  <span>Python & Algorithmic Practice</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#D6AD60]" />
-                  <span>Lakshami Narayan College (LNCTS)</span>
+                  <School className="w-4 h-4 text-[#D6AD60] shrink-0" />
+                  <span>LNCTS Bhopal Engineering</span>
                 </div>
               </div>
             </div>

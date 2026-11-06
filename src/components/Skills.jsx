@@ -5,15 +5,17 @@ import {
   Cpu, 
   Wrench, 
   Sparkles, 
-  Terminal, 
-  Database, 
-  Server, 
-  Layout, 
   Boxes,
+  Layout,
+  Server,
+  Database,
+  Binary,
+  GitBranch,
   CheckCircle2
 } from 'lucide-react';
 import { portfolioData } from '../data/portfolioData';
 import Card3D from './Card3D';
+import TechLogo from './TechLogo';
 
 export default function Skills() {
   const { skills } = portfolioData;
@@ -42,7 +44,7 @@ export default function Skills() {
             Technical <span className="text-gradient-gold">Skill Set</span>
           </h2>
           <p className="text-[#A7AAA8] text-sm sm:text-base">
-            Structured skill categories across programming languages, web systems, algorithmic foundations, and developer tooling.
+            Core technologies, programming languages, and engineering tools in Prince Kumar's stack.
           </p>
         </div>
 
@@ -55,7 +57,7 @@ export default function Skills() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all cursor-pointer ${
                   isActive
                     ? 'bg-[#D6AD60] text-[#0B0D0E] font-bold shadow-lg shadow-[#D6AD60]/20'
                     : 'bg-[#15191B] text-[#A7AAA8] hover:text-[#F5F5F0] border border-[#D6AD60]/20 hover:border-[#D6AD60]/40'
@@ -83,20 +85,23 @@ export default function Skills() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 {skills.programmingLanguages.map((lang, idx) => (
                   <Card3D key={idx} depth={15} maxTilt={10}>
-                    <div className="matte-card rounded-xl p-5 group h-full flex flex-col justify-between">
+                    <div className="matte-card rounded-2xl p-5 group h-full flex flex-col justify-between hover:border-[#D6AD60]/50 transition-all">
                       <div>
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-xs font-mono px-2 py-0.5 rounded bg-[#111416] text-[#D6AD60] border border-[#D6AD60]/20">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="w-12 h-12 rounded-xl bg-[#0B0D0E] border border-[#D6AD60]/30 flex items-center justify-center p-2.5 group-hover:scale-110 group-hover:border-[#D6AD60] transition-all shadow-md">
+                            <TechLogo name={lang.name} size={28} className="w-7 h-7" />
+                          </div>
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#111416] text-[#D6AD60] border border-[#D6AD60]/20">
                             {lang.category}
                           </span>
-                          <span className="w-2 h-2 rounded-full bg-[#D6AD60] group-hover:scale-125 transition-transform" />
                         </div>
                         <h4 className="text-xl font-bold text-[#F5F5F0] group-hover:text-[#D6AD60] transition-colors">
                           {lang.name}
                         </h4>
                       </div>
-                      <div className="mt-4 pt-3 border-t border-[#D6AD60]/15 text-xs text-[#A7AAA8] font-mono">
-                        {lang.highlight}
+                      <div className="mt-4 pt-3 border-t border-[#D6AD60]/15 text-xs text-[#A7AAA8] font-mono flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#D6AD60]" />
+                        <span>{lang.highlight}</span>
                       </div>
                     </div>
                   </Card3D>
@@ -124,17 +129,24 @@ export default function Skills() {
                     <Layout className="w-4 h-4 text-[#D6AD60]" />
                     <span>Frontend Engineering</span>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-2.5">
                     {skills.fullStack.frontend.map((item, idx) => (
                       <Card3D key={idx} depth={10} maxTilt={6}>
-                        <div className="matte-card rounded-lg p-3.5">
-                          <div className="flex items-center justify-between">
-                            <span className="font-semibold text-[#F5F5F0] text-sm">{item.name}</span>
-                            <span className="text-[10px] font-mono text-[#D6AD60] px-2 py-0.5 rounded bg-[#111416] border border-[#D6AD60]/20">
-                              {item.level}
-                            </span>
+                        <div className="matte-card rounded-xl p-3.5 flex items-center justify-between group hover:border-[#D6AD60]/50 transition-all">
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-lg bg-[#0B0D0E] border border-[#D6AD60]/25 flex items-center justify-center p-1.5 group-hover:scale-105 transition-transform">
+                              <TechLogo name={item.name} size={20} className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <div className="font-semibold text-[#F5F5F0] text-sm group-hover:text-[#D6AD60] transition-colors">
+                                {item.name}
+                              </div>
+                              <span className="text-[10px] text-[#A7AAA8] font-mono block">
+                                {item.level}
+                              </span>
+                            </div>
                           </div>
-                          <p className="text-xs text-[#A7AAA8] mt-1">{item.desc}</p>
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#D6AD60]/60 group-hover:bg-[#D6AD60] transition-colors" />
                         </div>
                       </Card3D>
                     ))}
@@ -147,17 +159,24 @@ export default function Skills() {
                     <Server className="w-4 h-4 text-[#D6AD60]" />
                     <span>Backend Systems</span>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-2.5">
                     {skills.fullStack.backend.map((item, idx) => (
                       <Card3D key={idx} depth={10} maxTilt={6}>
-                        <div className="matte-card rounded-lg p-3.5">
-                          <div className="flex items-center justify-between">
-                            <span className="font-semibold text-[#F5F5F0] text-sm">{item.name}</span>
-                            <span className="text-[10px] font-mono text-[#D6AD60] px-2 py-0.5 rounded bg-[#111416] border border-[#D6AD60]/20">
-                              {item.level}
-                            </span>
+                        <div className="matte-card rounded-xl p-3.5 flex items-center justify-between group hover:border-[#D6AD60]/50 transition-all">
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-lg bg-[#0B0D0E] border border-[#D6AD60]/25 flex items-center justify-center p-1.5 group-hover:scale-105 transition-transform">
+                              <TechLogo name={item.name} size={20} className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <div className="font-semibold text-[#F5F5F0] text-sm group-hover:text-[#D6AD60] transition-colors">
+                                {item.name}
+                              </div>
+                              <span className="text-[10px] text-[#A7AAA8] font-mono block">
+                                {item.level}
+                              </span>
+                            </div>
                           </div>
-                          <p className="text-xs text-[#A7AAA8] mt-1">{item.desc}</p>
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#D6AD60]/60 group-hover:bg-[#D6AD60] transition-colors" />
                         </div>
                       </Card3D>
                     ))}
@@ -170,17 +189,24 @@ export default function Skills() {
                     <Database className="w-4 h-4 text-[#D6AD60]" />
                     <span>Database Architecture</span>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-2.5">
                     {skills.fullStack.database.map((item, idx) => (
                       <Card3D key={idx} depth={10} maxTilt={6}>
-                        <div className="matte-card rounded-lg p-3.5">
-                          <div className="flex items-center justify-between">
-                            <span className="font-semibold text-[#F5F5F0] text-sm">{item.name}</span>
-                            <span className="text-[10px] font-mono text-[#D6AD60] px-2 py-0.5 rounded bg-[#111416] border border-[#D6AD60]/20">
-                              {item.level}
-                            </span>
+                        <div className="matte-card rounded-xl p-3.5 flex items-center justify-between group hover:border-[#D6AD60]/50 transition-all">
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-lg bg-[#0B0D0E] border border-[#D6AD60]/25 flex items-center justify-center p-1.5 group-hover:scale-105 transition-transform">
+                              <TechLogo name={item.name} size={20} className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <div className="font-semibold text-[#F5F5F0] text-sm group-hover:text-[#D6AD60] transition-colors">
+                                {item.name}
+                              </div>
+                              <span className="text-[10px] text-[#A7AAA8] font-mono block">
+                                {item.level}
+                              </span>
+                            </div>
                           </div>
-                          <p className="text-xs text-[#A7AAA8] mt-1">{item.desc}</p>
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#D6AD60]/60 group-hover:bg-[#D6AD60] transition-colors" />
                         </div>
                       </Card3D>
                     ))}
@@ -191,36 +217,7 @@ export default function Skills() {
             </div>
           )}
 
-          {/* 3. DSA AND COMPUTER SCIENCE */}
-          {(activeTab === 'all' || activeTab === 'dsa') && (
-            <div>
-              <div className="flex items-center gap-2.5 mb-6 border-b border-[#D6AD60]/15 pb-3">
-                <Cpu className="w-5 h-5 text-[#D6AD60]" />
-                <h3 className="text-lg font-bold text-[#F5F5F0] uppercase tracking-wider font-mono">
-                  DSA and Computer Science Foundations
-                </h3>
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                {skills.dsaAndCS.map((dsa, idx) => (
-                  <Card3D key={idx} depth={12} maxTilt={8}>
-                    <div className="matte-card rounded-xl p-4 group h-full">
-                      <div className="flex items-center gap-2 mb-2">
-                        <CheckCircle2 className="w-4 h-4 text-[#D6AD60] shrink-0" />
-                        <h4 className="text-sm font-bold text-[#F5F5F0] group-hover:text-[#D6AD60] transition-colors">
-                          {dsa.name}
-                        </h4>
-                      </div>
-                      <p className="text-[11px] text-[#A7AAA8] leading-snug">
-                        {dsa.focus}
-                      </p>
-                    </div>
-                  </Card3D>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 4. DEVELOPER TOOLS */}
+          {/* 3. DEVELOPER TOOLS */}
           {(activeTab === 'all' || activeTab === 'tools') && (
             <div>
               <div className="flex items-center gap-2.5 mb-6 border-b border-[#D6AD60]/15 pb-3">
@@ -229,20 +226,57 @@ export default function Skills() {
                   Developer Tools & Environments
                 </h3>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
                 {skills.developerTools.map((tool, idx) => (
                   <Card3D key={idx} depth={12} maxTilt={8}>
-                    <div className="matte-card rounded-xl p-4 group h-full flex flex-col justify-between">
-                      <div>
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#111416] text-[#D6AD60] border border-[#D6AD60]/20 mb-2 inline-block">
+                    <div className="matte-card rounded-xl p-4 group h-full flex flex-col justify-between hover:border-[#D6AD60]/50 transition-all">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="w-10 h-10 rounded-xl bg-[#0B0D0E] border border-[#D6AD60]/30 flex items-center justify-center p-2 group-hover:scale-110 transition-transform">
+                          <TechLogo name={tool.name} size={22} className="w-5 h-5" />
+                        </div>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#111416] text-[#D6AD60] border border-[#D6AD60]/20">
                           {tool.type}
                         </span>
-                        <h4 className="text-base font-bold text-[#F5F5F0] group-hover:text-[#D6AD60] transition-colors">
+                      </div>
+                      <div>
+                        <h4 className="text-sm sm:text-base font-bold text-[#F5F5F0] group-hover:text-[#D6AD60] transition-colors">
                           {tool.name}
                         </h4>
+                        <span className="text-[11px] text-[#A7AAA8] font-mono mt-0.5 block truncate">
+                          {tool.desc}
+                        </span>
                       </div>
-                      <p className="text-xs text-[#A7AAA8] mt-2">
-                        {tool.desc}
+                    </div>
+                  </Card3D>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 4. AI AND EMERGING TECHNOLOGIES */}
+          {(activeTab === 'all' || activeTab === 'ai') && (
+            <div>
+              <div className="flex items-center gap-2.5 mb-6 border-b border-[#D6AD60]/15 pb-3">
+                <Sparkles className="w-5 h-5 text-[#D6AD60]" />
+                <h3 className="text-lg font-bold text-[#F5F5F0] uppercase tracking-wider font-mono">
+                  AI & Applied Technologies
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                {skills.aiAndEmerging.map((ai, idx) => (
+                  <Card3D key={idx} depth={15} maxTilt={10}>
+                    <div className="matte-card rounded-xl p-5 group h-full hover:border-[#D6AD60]/50 transition-all">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="w-10 h-10 rounded-xl bg-[#0B0D0E] border border-[#D6AD60]/30 flex items-center justify-center p-2 group-hover:scale-110 transition-transform">
+                          <TechLogo name={ai.name} size={22} className="w-5 h-5" />
+                        </div>
+                        <span className="text-xs font-mono text-[#D6AD60]">AI STACK</span>
+                      </div>
+                      <h4 className="text-lg font-bold text-[#F5F5F0] group-hover:text-[#D6AD60] transition-colors mb-1">
+                        {ai.name}
+                      </h4>
+                      <p className="text-xs text-[#A7AAA8] leading-relaxed">
+                        {ai.desc}
                       </p>
                     </div>
                   </Card3D>
@@ -251,29 +285,30 @@ export default function Skills() {
             </div>
           )}
 
-          {/* 5. AI AND EMERGING TECHNOLOGIES */}
-          {(activeTab === 'all' || activeTab === 'ai') && (
+          {/* 5. DSA AND COMPUTER SCIENCE */}
+          {(activeTab === 'all' || activeTab === 'dsa') && (
             <div>
               <div className="flex items-center gap-2.5 mb-6 border-b border-[#D6AD60]/15 pb-3">
-                <Sparkles className="w-5 h-5 text-[#D6AD60]" />
+                <Cpu className="w-5 h-5 text-[#D6AD60]" />
                 <h3 className="text-lg font-bold text-[#F5F5F0] uppercase tracking-wider font-mono">
-                  AI & Applied Systems
+                  DSA and Computer Science Foundations
                 </h3>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-                {skills.aiAndEmerging.map((ai, idx) => (
-                  <Card3D key={idx} depth={15} maxTilt={10}>
-                    <div className="matte-card rounded-xl p-5 group h-full">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-xs font-mono text-[#D6AD60]">APPLIED AI</span>
-                        <Sparkles className="w-4 h-4 text-[#D6AD60] group-hover:rotate-12 transition-transform" />
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5">
+                {skills.dsaAndCS.map((dsa, idx) => (
+                  <Card3D key={idx} depth={12} maxTilt={8}>
+                    <div className="matte-card rounded-xl p-3.5 group h-full flex items-center gap-3 hover:border-[#D6AD60]/50 transition-all">
+                      <div className="w-8 h-8 rounded-lg bg-[#0B0D0E] border border-[#D6AD60]/20 flex items-center justify-center text-[#D6AD60] shrink-0 group-hover:scale-105 transition-transform">
+                        <Binary className="w-4 h-4" />
                       </div>
-                      <h4 className="text-lg font-bold text-[#F5F5F0] group-hover:text-[#D6AD60] transition-colors mb-2">
-                        {ai.name}
-                      </h4>
-                      <p className="text-xs text-[#A7AAA8] leading-relaxed">
-                        {ai.desc}
-                      </p>
+                      <div className="min-w-0">
+                        <h4 className="text-xs sm:text-sm font-bold text-[#F5F5F0] group-hover:text-[#D6AD60] transition-colors truncate">
+                          {dsa.name}
+                        </h4>
+                        <span className="text-[10px] text-[#A7AAA8]/70 font-mono block truncate">
+                          {dsa.focus}
+                        </span>
+                      </div>
                     </div>
                   </Card3D>
                 ))}

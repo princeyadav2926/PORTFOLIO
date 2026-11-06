@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { portfolioData } from '../data/portfolioData';
 import Card3D from './Card3D';
+import TechLogo from './TechLogo';
 
 export default function Projects() {
   const { projects } = portfolioData;
@@ -172,14 +173,15 @@ export default function Projects() {
                       </div>
                     </div>
 
-                    {/* Tech Badges */}
+                    {/* Tech Badges with Logos */}
                     <div className="flex flex-wrap gap-1.5 mb-6">
                       {proj.technologies.map((tech) => (
                         <span
                           key={tech}
-                          className="px-2.5 py-0.5 rounded-md text-xs font-mono bg-[#0B0D0E] border border-[#D6AD60]/15 text-[#F5E6C8]"
+                          className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono bg-[#0B0D0E] border border-[#D6AD60]/20 text-[#F5E6C8] shadow-sm"
                         >
-                          {tech}
+                          <TechLogo name={tech} size={13} className="w-3.5 h-3.5 shrink-0" />
+                          <span>{tech}</span>
                         </span>
                       ))}
                     </div>

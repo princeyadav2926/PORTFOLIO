@@ -17,6 +17,7 @@ import {
 import { portfolioData } from '../data/portfolioData';
 import Card3D from './Card3D';
 import Hero3DCanvas from './Hero3DCanvas';
+import TechLogo from './TechLogo';
 
 export default function Hero({ onOpenResume }) {
   const { hero, personal } = portfolioData;
@@ -174,15 +175,25 @@ export default function Hero({ onOpenResume }) {
               </a>
             </div>
 
-            {/* Tech Badges */}
+            {/* Tech Stack Badges with Official Logos */}
             <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-2 text-xs font-mono text-[#A7AAA8]">
-              <span className="text-[#A7AAA8]/60">Core Stack:</span>
-              {['C++', 'Java', 'Full Stack', 'DSA', 'LNCTS Bhopal'].map((tech) => (
+              <span className="text-[#A7AAA8]/60 mr-1">Core Tech:</span>
+              {[
+                { name: 'C++', label: 'C++' },
+                { name: 'Java', label: 'Java' },
+                { name: 'Python', label: 'Python' },
+                { name: 'JavaScript', label: 'JavaScript' },
+                { name: 'React.js', label: 'React.js' },
+                { name: 'Node.js', label: 'Node.js' },
+                { name: 'MongoDB', label: 'MongoDB' },
+                { name: 'Git', label: 'Git' }
+              ].map((tech) => (
                 <span
-                  key={tech}
-                  className="px-2.5 py-1 rounded-md bg-[#15191B] border border-[#D6AD60]/20 text-[#F5E6C8]"
+                  key={tech.name}
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#15191B] border border-[#D6AD60]/20 text-[#F5E6C8] hover:border-[#D6AD60]/50 transition-colors shadow-sm"
                 >
-                  {tech}
+                  <TechLogo name={tech.name} size={14} className="w-3.5 h-3.5 shrink-0" />
+                  <span>{tech.label}</span>
                 </span>
               ))}
             </div>
