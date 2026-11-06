@@ -30,6 +30,9 @@ export default defineConfig(({ mode }) => {
 
               req.on('end', async () => {
                 try {
+                  const currentEnv = loadEnv(server.config.mode || 'development', process.cwd(), '');
+                  Object.assign(process.env, currentEnv);
+
                   const body = JSON.parse(bodyStr || '{}');
                   const { default: handler } = await server.ssrLoadModule('/api/contact.js');
 

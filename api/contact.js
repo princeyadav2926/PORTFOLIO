@@ -1,5 +1,43 @@
-// Vercel Serverless Function: POST /api/contact
-// Securely handles contact form submissions and routes them to Prince Kumar's Gmail (princeraj.947168@gmail.com)
+import fs from 'fs';
+import path from 'path';
+
+// Helper to reliably read WEB3FORMS_ACCESS_KEY across Vercel, Node, and local environments
+function resolveWeb3FormsKey() {
+  // 1. Check standard environment variables
+  const envVars = [
+    process.env.WEB3FORMS_ACCESS_KEY,
+    process.env.VITE_WEB3FORMS_ACCESS_KEY,
+    process.env.VITE_WEB3FORMS_KEY,
+    process.env.WEB3FORMS_KEY
+  ];
+
+  for (const val of envVars) {
+    if (val && typeof val === 'string' && val.trim() && val.trim() !== 'YOUR_WEB3FORMS_ACCESS_KEY') {
+      return val.trim();
+    }
+  }
+
+  // 2. Direct .env / .env.local file parsing for local development
+  try {
+    const cwd = process.cwd();
+    const candidateFiles = ['.env', '.env.local', '.env.development'];
+    for (const fileName of candidateFiles) {
+      const filePath = path.resolve(cwd, fileName);
+      if (fs.existsSync(filePath)) {
+        const fileContent = fs.readFileSync(filePath, 'utf8');
+        // Look for WEB3FORMS_ACCESS_KEY or VITE_WEB3FORMS_ACCESS_KEY
+        const match = fileContent.match(/(?:VITE_)?WEB3FORMS_(?:ACCESS_)?KEY\s*=\s*["']?([a-zA-Z0-9_-]+)["']?/);
+        if (match && match[1] && match[1].trim() && match[1].trim() !== 'your_web3forms_access_key_here') {
+          return match[1].trim();
+        }
+      }
+    }
+  } catch (err) {
+    // Ignore fs errors in strictly sandboxed serverless runtimes
+  }
+
+  return null;
+}
 
 export default async function handler(req, res) {
   // CORS configuration
@@ -25,16 +63,16 @@ export default async function handler(req, res) {
   try {
     const { name, email, subject, message, botcheck } = req.body || {};
 
-    // 1. Honeypot anti-spam verification
+    // 1. Anti-spam honeypot verification
     if (botcheck) {
-      // Spam detected silently: return 200 without sending to prevent bot retries
+      // Spam bot detected: acknowledge with 200 without sending to prevent retries
       return res.status(200).json({
         success: true,
         message: 'Message processed successfully.'
       });
     }
 
-    // 2. Strict Input Validation
+    // 2. Form field validation
     const cleanName = (name || '').trim();
     const cleanEmail = (email || '').trim();
     const cleanSubject = (subject || '').trim();
@@ -51,7 +89,7 @@ export default async function handler(req, res) {
     if (!cleanEmail || !emailRegex.test(cleanEmail)) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide a valid email address where Prince can reply.'
+        message: 'Please provide a valid email address.'
       });
     }
 
@@ -69,104 +107,61 @@ export default async function handler(req, res) {
       });
     }
 
-    const recipientEmail = 'princeraj.947168@gmail.com';
+    // 3. Resolve Web3Forms Access Key from environment variables (never hardcoded)
+    const accessKey = resolveWeb3FormsKey();
 
-    // 3. Environment Variables (never exposed to frontend client bundles)
-    const web3formsAccessKey = process.env.WEB3FORMS_ACCESS_KEY || process.env.VITE_WEB3FORMS_KEY;
-    const emailJsServiceId = process.env.EMAILJS_SERVICE_ID;
-    const emailJsTemplateId = process.env.EMAILJS_TEMPLATE_ID;
-    const emailJsPublicKey = process.env.EMAILJS_PUBLIC_KEY;
-    const emailJsPrivateKey = process.env.EMAILJS_PRIVATE_KEY;
-
-    // 4. Primary Provider: Web3Forms (if key is configured)
-    if (web3formsAccessKey && web3formsAccessKey !== 'YOUR_WEB3FORMS_ACCESS_KEY') {
-      const web3Response = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Origin': req.headers?.origin || 'https://prince-portfolio.vercel.app',
-          'Referer': req.headers?.referer || 'https://prince-portfolio.vercel.app/'
-        },
-        body: JSON.stringify({
-          access_key: web3formsAccessKey,
-          name: cleanName,
-          email: cleanEmail,
-          subject: `[Portfolio] ${cleanSubject} (from ${cleanName})`,
-          message: `Sender Name: ${cleanName}\nSender Email: ${cleanEmail}\nSubject: ${cleanSubject}\n\nMessage:\n${cleanMessage}\n\n---\nSent from Prince Kumar Portfolio (LNCTS Bhopal)`,
-          from_name: `${cleanName} via Portfolio`,
-          to: recipientEmail
-        })
+    if (!accessKey) {
+      return res.status(503).json({
+        success: false,
+        message: 'Email service access key is not yet configured in server environment variables (WEB3FORMS_ACCESS_KEY). Please add your key to .env or Vercel Environment Variables.'
       });
-
-      const data = await web3Response.json().catch(() => ({}));
-
-      if (web3Response.ok && data.success) {
-        return res.status(200).json({
-          success: true,
-          message: 'Message delivered successfully to Prince Kumar! Thank you for reaching out.'
-        });
-      } else {
-        return res.status(web3Response.status || 502).json({
-          success: false,
-          message: data.message || 'Web3Forms service failed to deliver message.',
-          provider: 'web3forms'
-        });
-      }
     }
 
-    // 5. Alternate Provider: EmailJS (if configured)
-    if (emailJsServiceId && emailJsTemplateId && emailJsPublicKey) {
-      const emailJsPayload = {
-        service_id: emailJsServiceId,
-        template_id: emailJsTemplateId,
-        user_id: emailJsPublicKey,
-        ...(emailJsPrivateKey ? { accessToken: emailJsPrivateKey } : {}),
-        template_params: {
-          name: cleanName,
-          from_name: cleanName,
-          email: cleanEmail,
-          from_email: cleanEmail,
-          to_email: recipientEmail,
-          subject: cleanSubject,
-          message: cleanMessage,
-          sent_at: new Date().toISOString()
-        }
-      };
+    // 4. Submit to Web3Forms API
+    const web3Payload = {
+      access_key: accessKey,
+      name: cleanName,
+      email: cleanEmail,
+      replyto: cleanEmail,
+      subject: `[Portfolio Contact] ${cleanSubject} - from ${cleanName}`,
+      message: `Sender Name: ${cleanName}\nSender Email: ${cleanEmail}\nSubject: ${cleanSubject}\n\nMessage:\n${cleanMessage}\n\n---\nSent from Prince Kumar Portfolio (LNCTS Bhopal)`,
+      from_name: `${cleanName} via Portfolio`
+    };
 
-      const emailJsResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(emailJsPayload)
-      });
+    const origin = req.headers?.origin || 'https://prince-portfolio.vercel.app';
+    const referer = req.headers?.referer || 'https://prince-portfolio.vercel.app/';
 
-      if (emailJsResponse.ok) {
-        return res.status(200).json({
-          success: true,
-          message: 'Message delivered successfully to Prince Kumar via EmailJS!'
-        });
-      } else {
-        const errText = await emailJsResponse.text().catch(() => 'EmailJS error');
-        return res.status(emailJsResponse.status || 502).json({
-          success: false,
-          message: `EmailJS dispatch failed: ${errText}`,
-          provider: 'emailjs'
-        });
-      }
-    }
-
-    // 6. If no API key is yet set in environment variables
-    return res.status(503).json({
-      success: false,
-      message: 'Email service access key is not yet configured in server environment variables (WEB3FORMS_ACCESS_KEY).',
-      recipientEmail
+    const web3Response = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Origin': origin,
+        'Referer': referer
+      },
+      body: JSON.stringify(web3Payload)
     });
 
+    const data = await web3Response.json().catch(() => ({}));
+
+    // 5. Strictly verify Web3Forms response before confirming success
+    if (web3Response.ok && data.success === true) {
+      return res.status(200).json({
+        success: true,
+        message: 'Message sent successfully! Prince will get back to you soon.'
+      });
+    } else {
+      return res.status(web3Response.status || 400).json({
+        success: false,
+        message: data.message || 'Web3Forms failed to deliver the message. Please verify your access key.'
+      });
+    }
+
   } catch (error) {
-    console.error('Portfolio Contact Handler Error:', error);
+    console.error('Contact Form Backend Error:', error);
     return res.status(500).json({
       success: false,
-      message: error.message || 'An unexpected server error occurred while sending your message.'
+      message: error.message || 'An unexpected error occurred while transmitting your message.'
     });
   }
 }

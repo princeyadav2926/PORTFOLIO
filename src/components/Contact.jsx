@@ -147,7 +147,7 @@ export default function Contact() {
       }
 
       // 2. Secondary Fallback: If client-side Web3Forms key is configured
-      const clientKey = import.meta.env.VITE_WEB3FORMS_KEY;
+      const clientKey = import.meta.env.VITE_WEB3FORMS_KEY || import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
       if (clientKey) {
         const directRes = await fetch('https://api.web3forms.com/submit', {
           method: 'POST',
