@@ -12,10 +12,16 @@ import {
   School,
   Loader2,
   RefreshCw,
-  ExternalLink
+  X
 } from 'lucide-react';
 import { portfolioData } from '../data/portfolioData';
 import Card3D from './Card3D';
+
+// Web3Forms public access key linked to princeraj.947168@gmail.com
+const WEB3FORMS_ACCESS_KEY = 
+  import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || 
+  import.meta.env.VITE_WEB3FORMS_KEY || 
+  "bcd8c16e-7b25-4c3e-b05e-a6bb29071834";
 
 export default function Contact() {
   const { personal } = portfolioData;
@@ -38,7 +44,6 @@ export default function Contact() {
     subject: '',
     message: ''
   });
-  const [botcheck, setBotcheck] = useState(''); // Anti-spam honeypot
 
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle'); // 'idle' | 'submitting' | 'success' | 'error'
@@ -93,15 +98,30 @@ export default function Contact() {
     if (!messageTrimmed) {
       errs.message = 'Please write your message.';
     } else if (messageTrimmed.length < 10) {
-      errs.message = `Message must be at least 10 characters long (${messageTrimmed.length}/10).`;
+      errs.message = `Message must be at least 10 characters (${messageTrimmed.length}/10).`;
     }
 
     return errs;
   };
 
-  // Submission Handler
+  // Clear previous errors when typing
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: null }));
+    }
+    if (status === 'error') {
+      setStatus('idle');
+      setErrorMessage('');
+    }
+  };
+
+  // Form Submission via Web3Forms API POST request
   const handleSubmit = async (e) => {
     if (e && e.preventDefault) e.preventDefault();
+    
+    // Clear old errors on retry
+    setErrorMessage('');
     
     const validationErrors = validate();
     setErrors(validationErrors);
@@ -111,99 +131,51 @@ export default function Contact() {
     }
 
     setStatus('submitting');
-    setErrorMessage('');
 
-    const payload = {
-      name: formData.name.trim(),
-      email: formData.email.trim(),
-      subject: formData.subject.trim(),
-      message: formData.message.trim(),
-      botcheck: botcheck
-    };
+    const cleanName = formData.name.trim();
+    const cleanEmail = formData.email.trim();
+    const cleanSubject = formData.subject.trim();
+    const cleanMessage = formData.message.trim();
 
     try {
-      // 1. Primary: Secure Backend Serverless API (/api/contact)
-      // Keeps all API keys safe on the server side (Vercel Serverless Function & Vite dev server)
-      const res = await fetch('/api/contact', {
+      // POST directly to Web3Forms API endpoint (No mailto, No opening external apps)
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          name: cleanName,
+          email: cleanEmail,
+          subject: cleanSubject,
+          message: cleanMessage,
+          from_name: `${cleanName} (via Portfolio)`
+        })
       });
 
-      const data = await res.json().catch(() => ({}));
+      const data = await response.json().catch(() => ({}));
 
-      if (res.ok && data.success) {
+      // Confirm actual successful delivery from Web3Forms
+      if (response.ok && data.success === true) {
         setSuccessData({
-          name: payload.name,
-          email: payload.email,
-          subject: payload.subject
+          name: cleanName,
+          email: cleanEmail,
+          subject: cleanSubject
         });
         setStatus('success');
         setFormData({ name: '', email: '', subject: '', message: '' });
-        return;
+        setErrors({});
+        setErrorMessage('');
+      } else {
+        setStatus('error');
+        setErrorMessage(data.message || 'Submission failed. Please try again.');
       }
-
-      // 2. Client-Direct Delivery Fallback:
-      // Web3Forms free tier requires client-side browser submission.
-      // If server hit Cloudflare restriction or returns fallbackKey, browser submits directly.
-      const clientKey = 
-        data.fallbackKey || 
-        import.meta.env.VITE_WEB3FORMS_KEY || 
-        import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
-
-      const activeKey = clientKey || (await fetch('/api/contact').then(r => r.json()).then(d => d.key).catch(() => null));
-
-      if (activeKey) {
-        const directRes = await fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            access_key: activeKey,
-            name: payload.name,
-            email: payload.email,
-            replyto: payload.email,
-            subject: `[Portfolio Contact] ${payload.subject} - from ${payload.name}`,
-            message: `Sender Name: ${payload.name}\nSender Email: ${payload.email}\nSubject: ${payload.subject}\n\nMessage:\n${payload.message}\n\n---\nSent from Prince Kumar Portfolio (LNCTS Bhopal)`,
-            from_name: `${payload.name} via Portfolio`
-          })
-        });
-
-        const directData = await directRes.json().catch(() => ({}));
-        if (directRes.ok && directData.success === true) {
-          setSuccessData({
-            name: payload.name,
-            email: payload.email,
-            subject: payload.subject
-          });
-          setStatus('success');
-          setFormData({ name: '', email: '', subject: '', message: '' });
-          return;
-        } else if (directData.message) {
-          setStatus('error');
-          setErrorMessage(directData.message);
-          return;
-        }
-      }
-
-      // If both backend and fallback failed
-      setStatus('error');
-      setErrorMessage(
-        data.message || 
-        'Could not transmit message through the email gateway. Please try again or use the direct mail button.'
-      );
-
     } catch (err) {
-      console.error('Contact Form Submission Exception:', err);
+      console.error('Web3Forms submission exception:', err);
       setStatus('error');
-      setErrorMessage(
-        'Network error or service unavailable. Please check your internet connection or send via your mail app.'
-      );
+      setErrorMessage('Network connection error. Please try again.');
     }
   };
 
@@ -297,13 +269,7 @@ export default function Contact() {
 
                   <div className="text-[10px] font-mono text-[#A7AAA8]/60 flex items-center justify-between pt-1">
                     <span>* Connected to inbox</span>
-                    <a 
-                      href={`mailto:${contactEmail}`}
-                      className="text-[#D6AD60] hover:underline flex items-center gap-1"
-                    >
-                      <span>Direct mailto</span>
-                      <ExternalLink className="w-2.5 h-2.5" />
-                    </a>
+                    <span className="text-[#D6AD60]">princeraj.947168@gmail.com</span>
                   </div>
                 </div>
 
@@ -350,44 +316,29 @@ export default function Contact() {
             </Card3D>
           </div>
 
-          {/* Right Column: Validated Contact Form */}
+          {/* Right Column: Contact Form */}
           <div className="lg:col-span-7">
             <Card3D depth={15} maxTilt={6}>
               <div className="matte-card rounded-2xl p-6 sm:p-8 relative">
                 
-                {/* SUCCESS STATE - Shown ONLY when server confirms actual delivery */}
+                {/* SUCCESS NOTIFICATION - Shown ONLY on actual confirmed Web3Forms delivery */}
                 {status === 'success' ? (
                   <div className="py-10 px-4 text-center space-y-4">
-                    <div className="w-16 h-16 mx-auto rounded-full bg-[#15191B] border-2 border-[#D6AD60] flex items-center justify-center text-[#D6AD60] shadow-[0_0_25px_rgba(214,173,96,0.35)] animate-pulse">
+                    <div className="w-16 h-16 mx-auto rounded-full bg-[#15191B] border-2 border-[#D6AD60] flex items-center justify-center text-[#D6AD60] shadow-[0_0_25px_rgba(214,173,96,0.35)]">
                       <CheckCircle className="w-8 h-8 text-[#D6AD60]" />
                     </div>
                     
                     <div className="space-y-1">
                       <div className="inline-block px-3 py-1 rounded-full bg-[#0B0D0E] border border-[#D6AD60]/30 text-[#D6AD60] text-xs font-mono">
-                        Status: 200 OK &bull; Delivered
+                        Delivered
                       </div>
                       <h3 className="text-2xl font-bold text-[#F5F5F0]">
                         Message Sent Successfully!
                       </h3>
                     </div>
 
-                    <div className="max-w-md mx-auto p-4 rounded-xl bg-[#0B0D0E] border border-[#D6AD60]/20 text-xs text-[#A7AAA8] space-y-2 text-left font-mono">
-                      <div className="flex justify-between border-b border-[#D6AD60]/10 pb-1.5">
-                        <span className="text-[#A7AAA8]/60">Sender:</span>
-                        <span className="text-[#F5F5F0] font-semibold">{successData.name} ({successData.email})</span>
-                      </div>
-                      <div className="flex justify-between border-b border-[#D6AD60]/10 pb-1.5">
-                        <span className="text-[#A7AAA8]/60">Recipient:</span>
-                        <span className="text-[#D6AD60] font-semibold">{personal.email}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-[#A7AAA8]/60">Subject:</span>
-                        <span className="text-[#F5F5F0] truncate max-w-[240px]">{successData.subject}</span>
-                      </div>
-                    </div>
-
                     <p className="text-xs sm:text-sm text-[#A7AAA8] max-w-md mx-auto leading-relaxed">
-                      Thank you, <strong className="text-[#F5F5F0]">{successData.name}</strong>. Your message has landed in Prince's Gmail inbox. He will review it and reply back to you at <span className="text-[#D6AD60] font-mono">{successData.email}</span>.
+                      Thank you, <strong className="text-[#F5F5F0]">{successData.name}</strong>. Your message has landed directly in Prince's Gmail inbox. He will review it and reply back to you at <span className="text-[#D6AD60] font-mono">{successData.email}</span>.
                     </p>
 
                     <div className="pt-2">
@@ -396,7 +347,7 @@ export default function Contact() {
                           setStatus('idle');
                           setErrorMessage('');
                         }}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#D6AD60] hover:bg-[#F5E6C8] text-[#0B0D0E] font-bold text-xs font-mono transition-colors shadow-lg shadow-[#D6AD60]/20"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#D6AD60] hover:bg-[#F5E6C8] text-[#0B0D0E] font-bold text-xs font-mono transition-colors shadow-lg shadow-[#D6AD60]/20 cursor-pointer"
                       >
                         <RefreshCw className="w-3.5 h-3.5" />
                         <span>Send Another Message</span>
@@ -406,57 +357,26 @@ export default function Contact() {
                 ) : (
                   <form onSubmit={handleSubmit} noValidate className="space-y-4">
                     
-                    {/* ERROR STATE ALERT */}
-                    {status === 'error' && (
-                      <div className="p-4 rounded-xl bg-red-950/40 border border-red-500/40 text-red-200 text-xs space-y-3">
-                        <div className="flex items-start gap-2.5">
-                          <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
-                          <div className="space-y-1">
-                            <strong className="font-semibold text-red-300 block">
-                              Message Submission Issue
-                            </strong>
-                            <p className="text-red-200/80 leading-relaxed font-mono text-[11px]">
-                              {errorMessage}
-                            </p>
-                          </div>
+                    {/* SUBTLE ERROR NOTIFICATION - Small, dismissible, never shown on page load */}
+                    {status === 'error' && errorMessage && (
+                      <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-200 text-xs flex items-center justify-between gap-3 font-mono">
+                        <div className="flex items-center gap-2">
+                          <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
+                          <span>{errorMessage}</span>
                         </div>
-
-                        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-red-500/20">
-                          <button
-                            type="button"
-                            onClick={handleSubmit}
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-900/60 hover:bg-red-800/80 text-red-200 text-xs font-mono font-semibold transition-colors"
-                          >
-                            <RefreshCw className="w-3 h-3" />
-                            <span>Try Again</span>
-                          </button>
-
-                          <a
-                            href={`mailto:${personal.email}?subject=${encodeURIComponent(formData.subject || 'Portfolio Inquiry')}&body=${encodeURIComponent(
-                              `Hi Prince,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-                            )}`}
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#D6AD60] hover:bg-[#F5E6C8] text-[#0B0D0E] text-xs font-mono font-bold transition-colors ml-auto"
-                          >
-                            <Mail className="w-3 h-3" />
-                            <span>Send via Mail Client</span>
-                          </a>
-                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setStatus('idle');
+                            setErrorMessage('');
+                          }}
+                          className="p-1 rounded text-amber-400/60 hover:text-amber-200 transition-colors shrink-0"
+                          title="Dismiss"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
                       </div>
                     )}
-
-                    {/* Hidden Honeypot Field for Spam Bots */}
-                    <div className="hidden" aria-hidden="true" style={{ display: 'none' }}>
-                      <label htmlFor="botcheck">Do not fill this field</label>
-                      <input
-                        type="text"
-                        name="botcheck"
-                        id="botcheck"
-                        value={botcheck}
-                        onChange={(e) => setBotcheck(e.target.value)}
-                        tabIndex={-1}
-                        autoComplete="off"
-                      />
-                    </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Name */}
@@ -468,10 +388,7 @@ export default function Contact() {
                           type="text"
                           name="name"
                           value={formData.name}
-                          onChange={(e) => {
-                            setFormData({ ...formData, name: e.target.value });
-                            if (errors.name) setErrors({ ...errors, name: null });
-                          }}
+                          onChange={(e) => handleInputChange('name', e.target.value)}
                           placeholder="e.g. Rahul Sharma"
                           className={`w-full px-4 py-2.5 rounded-xl bg-[#0B0D0E] border text-[#F5F5F0] placeholder-[#A7AAA8]/40 text-sm focus:outline-none transition-colors ${
                             errors.name ? 'border-red-500 focus:ring-1 focus:ring-red-500' : 'border-[#D6AD60]/20 focus:border-[#D6AD60]'
@@ -493,10 +410,7 @@ export default function Contact() {
                           type="email"
                           name="email"
                           value={formData.email}
-                          onChange={(e) => {
-                            setFormData({ ...formData, email: e.target.value });
-                            if (errors.email) setErrors({ ...errors, email: null });
-                          }}
+                          onChange={(e) => handleInputChange('email', e.target.value)}
                           placeholder="e.g. rahul@example.com"
                           className={`w-full px-4 py-2.5 rounded-xl bg-[#0B0D0E] border text-[#F5F5F0] placeholder-[#A7AAA8]/40 text-sm focus:outline-none transition-colors ${
                             errors.email ? 'border-red-500 focus:ring-1 focus:ring-red-500' : 'border-[#D6AD60]/20 focus:border-[#D6AD60]'
@@ -519,10 +433,7 @@ export default function Contact() {
                         type="text"
                         name="subject"
                         value={formData.subject}
-                        onChange={(e) => {
-                          setFormData({ ...formData, subject: e.target.value });
-                          if (errors.subject) setErrors({ ...errors, subject: null });
-                        }}
+                        onChange={(e) => handleInputChange('subject', e.target.value)}
                         placeholder="e.g. Full Stack Internship Opportunity / Project Collaboration"
                         className={`w-full px-4 py-2.5 rounded-xl bg-[#0B0D0E] border text-[#F5F5F0] placeholder-[#A7AAA8]/40 text-sm focus:outline-none transition-colors ${
                           errors.subject ? 'border-red-500 focus:ring-1 focus:ring-red-500' : 'border-[#D6AD60]/20 focus:border-[#D6AD60]'
@@ -549,10 +460,7 @@ export default function Contact() {
                         rows={4}
                         name="message"
                         value={formData.message}
-                        onChange={(e) => {
-                          setFormData({ ...formData, message: e.target.value });
-                          if (errors.message) setErrors({ ...errors, message: null });
-                        }}
+                        onChange={(e) => handleInputChange('message', e.target.value)}
                         placeholder="Hi Prince, I reviewed your Opportunity Radar and TerraForge projects. We would like to discuss..."
                         className={`w-full px-4 py-2.5 rounded-xl bg-[#0B0D0E] border text-[#F5F5F0] placeholder-[#A7AAA8]/40 text-sm focus:outline-none transition-colors resize-none ${
                           errors.message ? 'border-red-500 focus:ring-1 focus:ring-red-500' : 'border-[#D6AD60]/20 focus:border-[#D6AD60]'
@@ -565,7 +473,7 @@ export default function Contact() {
                       )}
                     </div>
 
-                    {/* Primary Submit Button */}
+                    {/* Send Message Button with Loading State & Duplicate Prevention */}
                     <button
                       type="submit"
                       disabled={status === 'submitting'}
@@ -574,12 +482,12 @@ export default function Contact() {
                       {status === 'submitting' ? (
                         <>
                           <Loader2 className="w-4 h-4 animate-spin text-[#0B0D0E]" />
-                          <span>Routing Message to Gmail...</span>
+                          <span>Sending Message...</span>
                         </>
                       ) : (
                         <>
                           <Send className="w-4 h-4" />
-                          <span>Send Message to Prince</span>
+                          <span>Send Message</span>
                         </>
                       )}
                     </button>
