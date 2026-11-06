@@ -87,6 +87,32 @@ npm run preview
 
 ---
 
+## 📬 Contact Form Configuration (Web3Forms & Vercel)
+
+The portfolio includes a secure serverless backend endpoint (`/api/contact`) that routes incoming contact submissions directly to **`princeraj.947168@gmail.com`** without exposing API keys in frontend code.
+
+### 1. Get Your Free Web3Forms Access Key:
+1. Go to [https://web3forms.com](https://web3forms.com).
+2. Enter your email: **`princeraj.947168@gmail.com`** and click **"Create Access Key"**.
+3. Check your Gmail inbox to copy the generated UUID Access Key.
+
+### 2. For Local Development:
+Add the key to your `.env` file:
+```env
+WEB3FORMS_ACCESS_KEY=your_copied_access_key_here
+RECIPIENT_EMAIL=princeraj.947168@gmail.com
+```
+
+### 3. For Vercel Production Deployment:
+1. In your **Vercel Project Dashboard**, go to **Settings** → **Environment Variables**.
+2. Add a new variable:
+   - **Key:** `WEB3FORMS_ACCESS_KEY`
+   - **Value:** `your_copied_access_key_here`
+3. Click **Save** and trigger a redeploy.
+4. Your contact form is now 100% active on the deployed Vercel URL!
+
+---
+
 ## 🌐 Deployment Instructions
 
 ### Deploying to Vercel (Recommended)

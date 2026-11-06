@@ -4,13 +4,15 @@ import {
   Mail, 
   Github, 
   Linkedin, 
-  MapPin, 
   CheckCircle, 
   AlertCircle, 
   Copy, 
   Check, 
   Edit3, 
-  School
+  School,
+  Loader2,
+  RefreshCw,
+  ExternalLink
 } from 'lucide-react';
 import { portfolioData } from '../data/portfolioData';
 import Card3D from './Card3D';
@@ -29,15 +31,23 @@ export default function Contact() {
   const [tempEmail, setTempEmail] = useState(contactEmail);
   const [copied, setCopied] = useState(false);
 
+  // Form State
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     subject: '',
     message: ''
   });
+  const [botcheck, setBotcheck] = useState(''); // Anti-spam honeypot
 
   const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState('idle');
+  const [status, setStatus] = useState('idle'); // 'idle' | 'submitting' | 'success' | 'error'
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successData, setSuccessData] = useState({
+    name: '',
+    email: '',
+    subject: ''
+  });
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(contactEmail);
@@ -53,34 +63,135 @@ export default function Contact() {
     }
   };
 
+  // Validation
   const validate = () => {
     const errs = {};
-    if (!formData.name.trim()) errs.name = 'Please provide your name.';
-    if (!formData.email.trim()) {
+    const nameTrimmed = formData.name.trim();
+    const emailTrimmed = formData.email.trim();
+    const subjectTrimmed = formData.subject.trim();
+    const messageTrimmed = formData.message.trim();
+
+    if (!nameTrimmed) {
+      errs.name = 'Full name is required.';
+    } else if (nameTrimmed.length < 2) {
+      errs.name = 'Name must be at least 2 characters.';
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailTrimmed) {
       errs.email = 'Email address is required.';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errs.email = 'Please provide a valid email address.';
+    } else if (!emailRegex.test(emailTrimmed)) {
+      errs.email = 'Please provide a valid email (e.g. name@example.com).';
     }
-    if (!formData.subject.trim()) errs.subject = 'Subject line is required.';
-    if (!formData.message.trim()) {
-      errs.message = 'Please enter your message.';
-    } else if (formData.message.trim().length < 10) {
-      errs.message = 'Message must be at least 10 characters long.';
+
+    if (!subjectTrimmed) {
+      errs.subject = 'Subject line is required.';
+    } else if (subjectTrimmed.length < 2) {
+      errs.subject = 'Subject must be at least 2 characters.';
     }
+
+    if (!messageTrimmed) {
+      errs.message = 'Please write your message.';
+    } else if (messageTrimmed.length < 10) {
+      errs.message = `Message must be at least 10 characters long (${messageTrimmed.length}/10).`;
+    }
+
     return errs;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // Submission Handler
+  const handleSubmit = async (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    
     const validationErrors = validate();
     setErrors(validationErrors);
 
-    if (Object.keys(validationErrors).length === 0) {
-      setStatus('submitting');
-      setTimeout(() => {
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
+
+    setStatus('submitting');
+    setErrorMessage('');
+
+    const payload = {
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      subject: formData.subject.trim(),
+      message: formData.message.trim(),
+      botcheck: botcheck
+    };
+
+    try {
+      // 1. Primary: Secure Backend Serverless API (/api/contact)
+      // Keeps all API keys safe on the server side (Vercel Serverless Function & Vite dev server)
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data.success) {
+        setSuccessData({
+          name: payload.name,
+          email: payload.email,
+          subject: payload.subject
+        });
         setStatus('success');
         setFormData({ name: '', email: '', subject: '', message: '' });
-      }, 900);
+        return;
+      }
+
+      // 2. Secondary Fallback: If client-side Web3Forms key is configured
+      const clientKey = import.meta.env.VITE_WEB3FORMS_KEY;
+      if (clientKey) {
+        const directRes = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            access_key: clientKey,
+            name: payload.name,
+            email: payload.email,
+            subject: `[Portfolio] ${payload.subject} (from ${payload.name})`,
+            message: `Sender Name: ${payload.name}\nSender Email: ${payload.email}\nSubject: ${payload.subject}\n\nMessage:\n${payload.message}\n\n---\nSent from Prince Kumar Portfolio (LNCTS Bhopal)`,
+            from_name: `${payload.name} via Portfolio`,
+            to: personal.email
+          })
+        });
+
+        const directData = await directRes.json().catch(() => ({}));
+        if (directRes.ok && directData.success) {
+          setSuccessData({
+            name: payload.name,
+            email: payload.email,
+            subject: payload.subject
+          });
+          setStatus('success');
+          setFormData({ name: '', email: '', subject: '', message: '' });
+          return;
+        }
+      }
+
+      // If both backend and fallback failed
+      setStatus('error');
+      setErrorMessage(
+        data.message || 
+        'Could not transmit message through the email gateway. Please try again or use the direct mail button.'
+      );
+
+    } catch (err) {
+      console.error('Contact Form Submission Exception:', err);
+      setStatus('error');
+      setErrorMessage(
+        'Network error or service unavailable. Please check your internet connection or send via your mail app.'
+      );
     }
   };
 
@@ -98,7 +209,7 @@ export default function Contact() {
             Have an Idea? <span className="text-gradient-gold">Let's Build Something Together.</span>
           </h2>
           <p className="text-[#A7AAA8] text-sm sm:text-base">
-            Reach out for software roles, internships, or engineering discussions.
+            Reach out for software developer roles, internships, or engineering discussions.
           </p>
         </div>
 
@@ -159,7 +270,7 @@ export default function Contact() {
                     </div>
                   ) : (
                     <div className="flex items-center justify-between gap-2 pt-1">
-                      <span className="font-mono text-sm text-[#F5F5F0] select-all break-all">
+                      <span className="font-mono text-sm text-[#F5F5F0] select-all break-all font-semibold">
                         {contactEmail}
                       </span>
                       <button
@@ -172,8 +283,15 @@ export default function Contact() {
                     </div>
                   )}
 
-                  <div className="text-[10px] font-mono text-[#A7AAA8]/60">
-                    * Editable contact field with local save.
+                  <div className="text-[10px] font-mono text-[#A7AAA8]/60 flex items-center justify-between pt-1">
+                    <span>* Connected to inbox</span>
+                    <a 
+                      href={`mailto:${contactEmail}`}
+                      className="text-[#D6AD60] hover:underline flex items-center gap-1"
+                    >
+                      <span>Direct mailto</span>
+                      <ExternalLink className="w-2.5 h-2.5" />
+                    </a>
                   </div>
                 </div>
 
@@ -198,9 +316,9 @@ export default function Contact() {
                       href={personal.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-[#0B0D0E] border border-[#D6AD60]/20 hover:border-[#D6AD60] text-[#F5F5F0] hover:text-[#D6AD60] font-mono text-xs font-semibold transition-all"
+                      className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-[#0B0D0E] border border-[#D6AD60]/20 hover:border-[#D6AD60] text-[#F5F5F0] hover:text-[#D6AD60] font-mono text-xs font-semibold transition-all group"
                     >
-                      <Github className="w-4 h-4" />
+                      <Github className="w-4 h-4 text-[#D6AD60] group-hover:scale-110 transition-transform" />
                       <span>GitHub</span>
                     </a>
 
@@ -208,9 +326,9 @@ export default function Contact() {
                       href={personal.linkedinUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-[#0B0D0E] border border-[#D6AD60]/20 hover:border-[#D6AD60] text-[#F5F5F0] hover:text-[#D6AD60] font-mono text-xs font-semibold transition-all"
+                      className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-[#0B0D0E] border border-[#D6AD60]/20 hover:border-[#D6AD60] text-[#F5F5F0] hover:text-[#D6AD60] font-mono text-xs font-semibold transition-all group"
                     >
-                      <Linkedin className="w-4 h-4" />
+                      <Linkedin className="w-4 h-4 text-[#D6AD60] group-hover:scale-110 transition-transform" />
                       <span>LinkedIn</span>
                     </a>
                   </div>
@@ -225,27 +343,109 @@ export default function Contact() {
             <Card3D depth={15} maxTilt={6}>
               <div className="matte-card rounded-2xl p-6 sm:p-8 relative">
                 
+                {/* SUCCESS STATE - Shown ONLY when server confirms actual delivery */}
                 {status === 'success' ? (
-                  <div className="py-12 text-center space-y-4">
-                    <div className="w-16 h-16 mx-auto rounded-full bg-[#15191B] border-2 border-[#D6AD60] flex items-center justify-center text-[#D6AD60] shadow-[0_0_20px_rgba(214,173,96,0.3)]">
-                      <CheckCircle className="w-8 h-8" />
+                  <div className="py-10 px-4 text-center space-y-4">
+                    <div className="w-16 h-16 mx-auto rounded-full bg-[#15191B] border-2 border-[#D6AD60] flex items-center justify-center text-[#D6AD60] shadow-[0_0_25px_rgba(214,173,96,0.35)] animate-pulse">
+                      <CheckCircle className="w-8 h-8 text-[#D6AD60]" />
                     </div>
-                    <h3 className="text-2xl font-bold text-[#F5F5F0]">
-                      Message Dispatched!
-                    </h3>
-                    <p className="text-sm text-[#A7AAA8] max-w-md mx-auto">
-                      Thank you for reaching out. Prince Kumar will review your message and reply promptly.
+                    
+                    <div className="space-y-1">
+                      <div className="inline-block px-3 py-1 rounded-full bg-[#0B0D0E] border border-[#D6AD60]/30 text-[#D6AD60] text-xs font-mono">
+                        Status: 200 OK &bull; Delivered
+                      </div>
+                      <h3 className="text-2xl font-bold text-[#F5F5F0]">
+                        Message Sent Successfully!
+                      </h3>
+                    </div>
+
+                    <div className="max-w-md mx-auto p-4 rounded-xl bg-[#0B0D0E] border border-[#D6AD60]/20 text-xs text-[#A7AAA8] space-y-2 text-left font-mono">
+                      <div className="flex justify-between border-b border-[#D6AD60]/10 pb-1.5">
+                        <span className="text-[#A7AAA8]/60">Sender:</span>
+                        <span className="text-[#F5F5F0] font-semibold">{successData.name} ({successData.email})</span>
+                      </div>
+                      <div className="flex justify-between border-b border-[#D6AD60]/10 pb-1.5">
+                        <span className="text-[#A7AAA8]/60">Recipient:</span>
+                        <span className="text-[#D6AD60] font-semibold">{personal.email}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-[#A7AAA8]/60">Subject:</span>
+                        <span className="text-[#F5F5F0] truncate max-w-[240px]">{successData.subject}</span>
+                      </div>
+                    </div>
+
+                    <p className="text-xs sm:text-sm text-[#A7AAA8] max-w-md mx-auto leading-relaxed">
+                      Thank you, <strong className="text-[#F5F5F0]">{successData.name}</strong>. Your message has landed in Prince's Gmail inbox. He will review it and reply back to you at <span className="text-[#D6AD60] font-mono">{successData.email}</span>.
                     </p>
-                    <button
-                      onClick={() => setStatus('idle')}
-                      className="px-5 py-2.5 rounded-xl bg-[#D6AD60] hover:bg-[#F5E6C8] text-[#0B0D0E] font-bold text-xs font-mono mt-4"
-                    >
-                      Send Another Message
-                    </button>
+
+                    <div className="pt-2">
+                      <button
+                        onClick={() => {
+                          setStatus('idle');
+                          setErrorMessage('');
+                        }}
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#D6AD60] hover:bg-[#F5E6C8] text-[#0B0D0E] font-bold text-xs font-mono transition-colors shadow-lg shadow-[#D6AD60]/20"
+                      >
+                        <RefreshCw className="w-3.5 h-3.5" />
+                        <span>Send Another Message</span>
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} noValidate className="space-y-4">
                     
+                    {/* ERROR STATE ALERT */}
+                    {status === 'error' && (
+                      <div className="p-4 rounded-xl bg-red-950/40 border border-red-500/40 text-red-200 text-xs space-y-3">
+                        <div className="flex items-start gap-2.5">
+                          <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                          <div className="space-y-1">
+                            <strong className="font-semibold text-red-300 block">
+                              Message Submission Issue
+                            </strong>
+                            <p className="text-red-200/80 leading-relaxed font-mono text-[11px]">
+                              {errorMessage}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-red-500/20">
+                          <button
+                            type="button"
+                            onClick={handleSubmit}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-900/60 hover:bg-red-800/80 text-red-200 text-xs font-mono font-semibold transition-colors"
+                          >
+                            <RefreshCw className="w-3 h-3" />
+                            <span>Try Again</span>
+                          </button>
+
+                          <a
+                            href={`mailto:${personal.email}?subject=${encodeURIComponent(formData.subject || 'Portfolio Inquiry')}&body=${encodeURIComponent(
+                              `Hi Prince,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+                            )}`}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#D6AD60] hover:bg-[#F5E6C8] text-[#0B0D0E] text-xs font-mono font-bold transition-colors ml-auto"
+                          >
+                            <Mail className="w-3 h-3" />
+                            <span>Send via Mail Client</span>
+                          </a>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Hidden Honeypot Field for Spam Bots */}
+                    <div className="hidden" aria-hidden="true" style={{ display: 'none' }}>
+                      <label htmlFor="botcheck">Do not fill this field</label>
+                      <input
+                        type="text"
+                        name="botcheck"
+                        id="botcheck"
+                        value={botcheck}
+                        onChange={(e) => setBotcheck(e.target.value)}
+                        tabIndex={-1}
+                        autoComplete="off"
+                      />
+                    </div>
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Name */}
                       <div>
@@ -254,12 +454,13 @@ export default function Contact() {
                         </label>
                         <input
                           type="text"
+                          name="name"
                           value={formData.name}
                           onChange={(e) => {
                             setFormData({ ...formData, name: e.target.value });
                             if (errors.name) setErrors({ ...errors, name: null });
                           }}
-                          placeholder="Your name"
+                          placeholder="e.g. Rahul Sharma"
                           className={`w-full px-4 py-2.5 rounded-xl bg-[#0B0D0E] border text-[#F5F5F0] placeholder-[#A7AAA8]/40 text-sm focus:outline-none transition-colors ${
                             errors.name ? 'border-red-500 focus:ring-1 focus:ring-red-500' : 'border-[#D6AD60]/20 focus:border-[#D6AD60]'
                           }`}
@@ -274,16 +475,17 @@ export default function Contact() {
                       {/* Email */}
                       <div>
                         <label className="block text-xs font-mono text-[#F5F5F0] mb-1">
-                          Email Address *
+                          Your Email Address *
                         </label>
                         <input
                           type="email"
+                          name="email"
                           value={formData.email}
                           onChange={(e) => {
                             setFormData({ ...formData, email: e.target.value });
                             if (errors.email) setErrors({ ...errors, email: null });
                           }}
-                          placeholder="you@domain.com"
+                          placeholder="e.g. rahul@example.com"
                           className={`w-full px-4 py-2.5 rounded-xl bg-[#0B0D0E] border text-[#F5F5F0] placeholder-[#A7AAA8]/40 text-sm focus:outline-none transition-colors ${
                             errors.email ? 'border-red-500 focus:ring-1 focus:ring-red-500' : 'border-[#D6AD60]/20 focus:border-[#D6AD60]'
                           }`}
@@ -299,16 +501,17 @@ export default function Contact() {
                     {/* Subject */}
                     <div>
                       <label className="block text-xs font-mono text-[#F5F5F0] mb-1">
-                        Subject *
+                        Subject Line *
                       </label>
                       <input
                         type="text"
+                        name="subject"
                         value={formData.subject}
                         onChange={(e) => {
                           setFormData({ ...formData, subject: e.target.value });
                           if (errors.subject) setErrors({ ...errors, subject: null });
                         }}
-                        placeholder="e.g. Software Role / Internship Opportunity"
+                        placeholder="e.g. Full Stack Internship Opportunity / Project Collaboration"
                         className={`w-full px-4 py-2.5 rounded-xl bg-[#0B0D0E] border text-[#F5F5F0] placeholder-[#A7AAA8]/40 text-sm focus:outline-none transition-colors ${
                           errors.subject ? 'border-red-500 focus:ring-1 focus:ring-red-500' : 'border-[#D6AD60]/20 focus:border-[#D6AD60]'
                         }`}
@@ -322,17 +525,23 @@ export default function Contact() {
 
                     {/* Message */}
                     <div>
-                      <label className="block text-xs font-mono text-[#F5F5F0] mb-1">
-                        Message *
-                      </label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-xs font-mono text-[#F5F5F0]">
+                          Your Message *
+                        </label>
+                        <span className="text-[10px] font-mono text-[#A7AAA8]/60">
+                          {formData.message.trim().length} chars (min 10)
+                        </span>
+                      </div>
                       <textarea
                         rows={4}
+                        name="message"
                         value={formData.message}
                         onChange={(e) => {
                           setFormData({ ...formData, message: e.target.value });
                           if (errors.message) setErrors({ ...errors, message: null });
                         }}
-                        placeholder="Write your message here..."
+                        placeholder="Hi Prince, I reviewed your Opportunity Radar and TerraForge projects. We would like to discuss..."
                         className={`w-full px-4 py-2.5 rounded-xl bg-[#0B0D0E] border text-[#F5F5F0] placeholder-[#A7AAA8]/40 text-sm focus:outline-none transition-colors resize-none ${
                           errors.message ? 'border-red-500 focus:ring-1 focus:ring-red-500' : 'border-[#D6AD60]/20 focus:border-[#D6AD60]'
                         }`}
@@ -344,15 +553,28 @@ export default function Contact() {
                       )}
                     </div>
 
-                    {/* Primary Submit Button: Champagne Gold + Dark text */}
+                    {/* Primary Submit Button */}
                     <button
                       type="submit"
                       disabled={status === 'submitting'}
-                      className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#D6AD60] hover:bg-[#F5E6C8] text-[#0B0D0E] font-bold text-sm shadow-lg shadow-[#D6AD60]/15 hover:shadow-[#D6AD60]/25 transition-all transform hover:-translate-y-0.5 disabled:opacity-50"
+                      className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#D6AD60] hover:bg-[#F5E6C8] text-[#0B0D0E] font-bold text-sm shadow-lg shadow-[#D6AD60]/15 hover:shadow-[#D6AD60]/25 transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                     >
-                      <Send className="w-4 h-4" />
-                      <span>{status === 'submitting' ? 'Transmitting Message...' : 'Send Message'}</span>
+                      {status === 'submitting' ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin text-[#0B0D0E]" />
+                          <span>Routing Message to Gmail...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          <span>Send Message to Prince</span>
+                        </>
+                      )}
                     </button>
+
+                    <div className="text-[11px] font-mono text-center text-[#A7AAA8]/60 pt-1">
+                      Direct delivery to <span className="text-[#D6AD60]">princeraj.947168@gmail.com</span> &bull; Zero spam
+                    </div>
 
                   </form>
                 )}
