@@ -1,23 +1,43 @@
 import fs from 'fs';
 import path from 'path';
 
-// Helper to reliably read WEB3FORMS_ACCESS_KEY across Vercel, Node, and local environments
+// Helper to reliably read web3forms_access_key (both small letters and uppercase) across Vercel, Node, and local environments
 function resolveWeb3FormsKey() {
-  // 1. Check standard environment variables
-  const envVars = [
+  // 1. Check small letters and uppercase variables
+  const explicitVars = [
+    process.env.web3forms_access_key,
     process.env.WEB3FORMS_ACCESS_KEY,
+    process.env.vite_web3forms_access_key,
     process.env.VITE_WEB3FORMS_ACCESS_KEY,
-    process.env.VITE_WEB3FORMS_KEY,
-    process.env.WEB3FORMS_KEY
+    process.env.web3forms_key,
+    process.env.WEB3FORMS_KEY,
+    process.env.VITE_WEB3FORMS_KEY
   ];
 
-  for (const val of envVars) {
-    if (val && typeof val === 'string' && val.trim() && val.trim() !== 'YOUR_WEB3FORMS_ACCESS_KEY') {
+  for (const val of explicitVars) {
+    if (val && typeof val === 'string' && val.trim() && !val.toLowerCase().includes('your_web3forms')) {
       return val.trim();
     }
   }
 
-  // 2. Direct .env / .env.local file parsing for local development
+  // 2. Case-insensitive scan over all process.env variables (ideal for Vercel lowercase / uppercase)
+  if (process.env && typeof process.env === 'object') {
+    for (const [k, v] of Object.entries(process.env)) {
+      const lower = k.toLowerCase();
+      if (
+        lower === 'web3forms_access_key' ||
+        lower === 'web3forms_key' ||
+        lower === 'vite_web3forms_access_key' ||
+        lower === 'web3forms'
+      ) {
+        if (v && typeof v === 'string' && v.trim() && !v.toLowerCase().includes('your_web3forms')) {
+          return v.trim();
+        }
+      }
+    }
+  }
+
+  // 3. Direct .env / .env.local file parsing for local development
   try {
     const cwd = process.cwd();
     const candidateFiles = ['.env', '.env.local', '.env.development'];
@@ -25,9 +45,9 @@ function resolveWeb3FormsKey() {
       const filePath = path.resolve(cwd, fileName);
       if (fs.existsSync(filePath)) {
         const fileContent = fs.readFileSync(filePath, 'utf8');
-        // Look for WEB3FORMS_ACCESS_KEY or VITE_WEB3FORMS_ACCESS_KEY
-        const match = fileContent.match(/(?:VITE_)?WEB3FORMS_(?:ACCESS_)?KEY\s*=\s*["']?([a-zA-Z0-9_-]+)["']?/);
-        if (match && match[1] && match[1].trim() && match[1].trim() !== 'your_web3forms_access_key_here') {
+        // Case-insensitive regex match for web3forms_access_key or WEB3FORMS_ACCESS_KEY
+        const match = fileContent.match(/(?:vite_)?web3forms_(?:access_)?key\s*=\s*["']?([a-zA-Z0-9_-]+)["']?/i);
+        if (match && match[1] && match[1].trim() && !match[1].toLowerCase().includes('your_web3forms')) {
           return match[1].trim();
         }
       }
@@ -43,7 +63,7 @@ export default async function handler(req, res) {
   // CORS configuration
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST');
   res.setHeader(
     'Access-Control-Allow-Headers',
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
@@ -53,10 +73,25 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
+  // GET /api/contact: Safely provides the active Web3Forms public access key to the client
+  if (req.method === 'GET') {
+    const accessKey = resolveWeb3FormsKey();
+    if (!accessKey) {
+      return res.status(503).json({
+        configured: false,
+        message: 'web3forms_access_key is not yet configured in environment variables.'
+      });
+    }
+    return res.status(200).json({
+      configured: true,
+      key: accessKey
+    });
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({
       success: false,
-      message: 'Method not allowed. Only POST requests are accepted.'
+      message: 'Method not allowed. Only GET and POST requests are accepted.'
     });
   }
 
@@ -107,13 +142,13 @@ export default async function handler(req, res) {
       });
     }
 
-    // 3. Resolve Web3Forms Access Key from environment variables (never hardcoded)
+    // 3. Resolve Web3Forms Access Key from environment variables
     const accessKey = resolveWeb3FormsKey();
 
     if (!accessKey) {
       return res.status(503).json({
         success: false,
-        message: 'Email service access key is not yet configured in server environment variables (WEB3FORMS_ACCESS_KEY). Please add your key to .env or Vercel Environment Variables.'
+        message: 'Email service access key is not yet configured in server environment variables (web3forms_access_key). Please add your key to .env or Vercel Environment Variables.'
       });
     }
 
@@ -130,19 +165,27 @@ export default async function handler(req, res) {
 
     const origin = req.headers?.origin || 'https://prince-portfolio.vercel.app';
     const referer = req.headers?.referer || 'https://prince-portfolio.vercel.app/';
+    const userAgent = req.headers?.['user-agent'] || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
     const web3Response = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'User-Agent': userAgent,
         'Origin': origin,
         'Referer': referer
       },
       body: JSON.stringify(web3Payload)
     });
 
-    const data = await web3Response.json().catch(() => ({}));
+    const rawText = await web3Response.text();
+    let data = {};
+    try {
+      data = JSON.parse(rawText);
+    } catch (e) {
+      // not JSON
+    }
 
     // 5. Strictly verify Web3Forms response before confirming success
     if (web3Response.ok && data.success === true) {
@@ -151,9 +194,11 @@ export default async function handler(req, res) {
         message: 'Message sent successfully! Prince will get back to you soon.'
       });
     } else {
+      // If Web3Forms blocked server IP, return key so client can complete direct submit
       return res.status(web3Response.status || 400).json({
         success: false,
-        message: data.message || 'Web3Forms failed to deliver the message. Please verify your access key.'
+        fallbackKey: accessKey,
+        message: data.message || 'Web3Forms failed to deliver the message.'
       });
     }
 

@@ -97,18 +97,18 @@ The portfolio includes a secure serverless backend endpoint (`/api/contact`) tha
 3. Check your Gmail inbox to copy the generated UUID Access Key.
 
 ### 2. For Local Development:
-Add the key to your `.env` file:
+Add the key to your `.env` file (small letters supported):
 ```env
-WEB3FORMS_ACCESS_KEY=your_copied_access_key_here
-RECIPIENT_EMAIL=princeraj.947168@gmail.com
+web3forms_access_key=your_copied_access_key_here
+recipient_email=princeraj.947168@gmail.com
 ```
 
 ### 3. For Vercel Production Deployment:
 1. In your **Vercel Project Dashboard**, go to **Settings** → **Environment Variables**.
-2. Add a new variable:
-   - **Key:** `WEB3FORMS_ACCESS_KEY`
+2. Add a new variable in small letters (or uppercase, both supported):
+   - **Key:** `web3forms_access_key` (or `WEB3FORMS_ACCESS_KEY`)
    - **Value:** `your_copied_access_key_here`
-3. Click **Save** and trigger a redeploy.
+3. Click **Save** and redeploy.
 4. Your contact form is now 100% active on the deployed Vercel URL!
 
 ---

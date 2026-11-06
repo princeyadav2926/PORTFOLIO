@@ -146,9 +146,17 @@ export default function Contact() {
         return;
       }
 
-      // 2. Secondary Fallback: If client-side Web3Forms key is configured
-      const clientKey = import.meta.env.VITE_WEB3FORMS_KEY || import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
-      if (clientKey) {
+      // 2. Client-Direct Delivery Fallback:
+      // Web3Forms free tier requires client-side browser submission.
+      // If server hit Cloudflare restriction or returns fallbackKey, browser submits directly.
+      const clientKey = 
+        data.fallbackKey || 
+        import.meta.env.VITE_WEB3FORMS_KEY || 
+        import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+
+      const activeKey = clientKey || (await fetch('/api/contact').then(r => r.json()).then(d => d.key).catch(() => null));
+
+      if (activeKey) {
         const directRes = await fetch('https://api.web3forms.com/submit', {
           method: 'POST',
           headers: {
@@ -156,18 +164,18 @@ export default function Contact() {
             'Accept': 'application/json'
           },
           body: JSON.stringify({
-            access_key: clientKey,
+            access_key: activeKey,
             name: payload.name,
             email: payload.email,
-            subject: `[Portfolio] ${payload.subject} (from ${payload.name})`,
+            replyto: payload.email,
+            subject: `[Portfolio Contact] ${payload.subject} - from ${payload.name}`,
             message: `Sender Name: ${payload.name}\nSender Email: ${payload.email}\nSubject: ${payload.subject}\n\nMessage:\n${payload.message}\n\n---\nSent from Prince Kumar Portfolio (LNCTS Bhopal)`,
-            from_name: `${payload.name} via Portfolio`,
-            to: personal.email
+            from_name: `${payload.name} via Portfolio`
           })
         });
 
         const directData = await directRes.json().catch(() => ({}));
-        if (directRes.ok && directData.success) {
+        if (directRes.ok && directData.success === true) {
           setSuccessData({
             name: payload.name,
             email: payload.email,
@@ -175,6 +183,10 @@ export default function Contact() {
           });
           setStatus('success');
           setFormData({ name: '', email: '', subject: '', message: '' });
+          return;
+        } else if (directData.message) {
+          setStatus('error');
+          setErrorMessage(directData.message);
           return;
         }
       }
