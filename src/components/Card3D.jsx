@@ -56,3 +56,4 @@ export default function Card3D({ children, className = '', depth = 20, maxTilt =
     </div>
   );
 }
+

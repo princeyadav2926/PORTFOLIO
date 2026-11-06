@@ -176,3 +176,4 @@ export default function Hero({ onOpenResume }) {
     </section>
   );
 }
+
