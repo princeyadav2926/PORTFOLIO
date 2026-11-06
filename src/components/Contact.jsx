@@ -19,7 +19,11 @@ export default function Contact() {
   const { personal } = portfolioData;
 
   const [contactEmail, setContactEmail] = useState(() => {
-    return localStorage.getItem('pk_contact_email') || personal.email;
+    const saved = localStorage.getItem('pk_contact_email');
+    if (saved && saved !== 'prince.cse.dev@gmail.com') {
+      return saved;
+    }
+    return personal.email;
   });
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [tempEmail, setTempEmail] = useState(contactEmail);

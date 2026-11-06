@@ -7,9 +7,9 @@ A modern, responsive, 3D developer portfolio engineered for **Prince Kumar** (B.
 ## ⚡ Tech Stack & Architecture
 
 - **Core Framework:** React 18 & Vite
-- **Styling & System:** Tailwind CSS with custom glassmorphism & deep dark obsidian palette (Electric Blue `#0ea5e9` & Cyber Cyan `#06b6d4`, strictly avoiding generic AI purple palettes)
-- **3D Engine:** Three.js Interactive 3D Canvas (Polyhedral wireframe lattice with dynamic orbiting particle field reacting to mouse coordinates)
-- **Interactive Physics:** Custom 3D perspective tilt cards (`Card3D`) with dynamic specular glare
+- **Styling & System:** Tailwind CSS with Matte Black (`#0B0D0E`) & Champagne Gold (`#D6AD60`) luxury engineering palette
+- **3D Engine:** Three.js Interactive 3D Canvas (Dual gyroscopic gold rings, wireframe dodecahedron, stardust field, and 6 flying floating orbital satellites)
+- **Interactive Physics:** Custom 3D perspective tilt cards (`Card3D`) with dynamic specular gold glare
 - **Icons:** Lucide React
 - **Data Architecture:** Centralized config (`src/data/portfolioData.js`) for rapid customization
 
@@ -109,6 +109,8 @@ npm run preview
 ## 👤 Developer Profile
 
 - **Name:** Prince Kumar
+- **College:** Lakshami Narayan College Of Technology And Science, Bhopal (LNCTS)
+- **Email:** princeraj.947168@gmail.com
 - **Role:** B.Tech CSE Student | Aspiring Full Stack Developer
 - **GitHub:** [princeyadav2926](https://github.com/princeyadav2926)
 - **LinkedIn:** [Prince Kumar](https://www.linkedin.com/in/prince-kumar-8897a8368/)

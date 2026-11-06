@@ -128,6 +128,10 @@ CERTIFICATIONS
               Lakshami Narayan College Of Technology And Science, Bhopal
             </p>
             <div className="flex flex-wrap gap-4 mt-2 text-xs text-[#A7AAA8]/60 font-mono">
+              <a href={`mailto:${personal.email}`} className="text-[#D6AD60] hover:underline font-semibold">
+                {personal.email}
+              </a>
+              <span>&bull;</span>
               <span>{personal.location}</span>
               <span>&bull;</span>
               <a href={personal.linkedinUrl} target="_blank" rel="noopener noreferrer" className="hover:text-[#D6AD60]">

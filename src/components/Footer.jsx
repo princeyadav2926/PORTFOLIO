@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUp, Github, Linkedin } from 'lucide-react';
+import { ArrowUp, Github, Linkedin, Mail } from 'lucide-react';
 import { portfolioData } from '../data/portfolioData';
 
 export default function Footer() {
@@ -73,6 +73,15 @@ export default function Footer() {
               className="p-2 rounded-lg bg-[#15191B] border border-[#D6AD60]/20 hover:border-[#D6AD60] text-[#A7AAA8] hover:text-[#D6AD60] transition-all"
             >
               <Linkedin className="w-4 h-4" />
+            </a>
+
+            <a
+              href={`mailto:${personal.email}`}
+              aria-label="Send Email"
+              title={`Email: ${personal.email}`}
+              className="p-2 rounded-lg bg-[#15191B] border border-[#D6AD60]/20 hover:border-[#D6AD60] text-[#A7AAA8] hover:text-[#D6AD60] transition-all"
+            >
+              <Mail className="w-4 h-4" />
             </a>
 
             <button

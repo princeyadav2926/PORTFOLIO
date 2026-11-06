@@ -1,10 +1,12 @@
-import React from 'react';
-import { Linkedin, ArrowUpRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { Linkedin, ArrowUpRight, Camera } from 'lucide-react';
 import { portfolioData } from '../data/portfolioData';
 import Card3D from './Card3D';
 
 export default function LinkedInCard() {
   const { personal } = portfolioData;
+  const avatar = localStorage.getItem('pk_custom_avatar') || personal.avatarUrl;
+  const [avatarErr, setAvatarErr] = useState(false);
 
   return (
     <section className="py-16 relative overflow-hidden bg-[#111416] border-t border-[#D6AD60]/20">
@@ -18,8 +20,26 @@ export default function LinkedInCard() {
             <div className="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
               
               <div className="flex items-center gap-5 text-center md:text-left">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#0B0D0E] border border-[#D6AD60]/30 flex items-center justify-center text-[#D6AD60] group-hover:scale-105 group-hover:border-[#D6AD60] transition-all shrink-0">
-                  <Linkedin className="w-8 h-8 sm:w-10 sm:h-10 text-[#D6AD60]" />
+                {/* Photo & LinkedIn Badge */}
+                <div className="relative shrink-0">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl p-0.5 bg-gradient-to-tr from-[#D6AD60] to-[#F5E6C8] shadow-[0_0_20px_rgba(214,173,96,0.25)]">
+                    <div className="w-full h-full rounded-[14px] overflow-hidden bg-[#15191B] flex items-center justify-center">
+                      {!avatarErr && avatar ? (
+                        <img
+                          src={avatar}
+                          alt="Prince Kumar LinkedIn"
+                          onError={() => setAvatarErr(true)}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className="font-mono font-bold text-lg text-[#D6AD60]">PK</span>
+                      )}
+                    </div>
+                  </div>
+                  {/* LinkedIn Logo Tag */}
+                  <div className="absolute -bottom-2 -right-2 p-1.5 rounded-lg bg-[#0B0D0E] border border-[#D6AD60]/50 text-[#D6AD60] shadow-md">
+                    <Linkedin className="w-3.5 h-3.5" />
+                  </div>
                 </div>
 
                 <div className="space-y-1.5">

@@ -57,11 +57,11 @@ export default function CommandPalette({ isOpen, onClose, onOpenResume }) {
     },
     {
       id: 'copy-email',
-      title: 'Copy Email Address (prince.cse.dev@gmail.com)',
+      title: 'Copy Email Address (princeraj.947168@gmail.com)',
       category: 'Actions',
       icon: Copy,
       run: () => {
-        navigator.clipboard.writeText('prince.cse.dev@gmail.com');
+        navigator.clipboard.writeText('princeraj.947168@gmail.com');
         setCopied(true);
         setTimeout(() => {
           setCopied(false);
@@ -219,7 +219,7 @@ export default function CommandPalette({ isOpen, onClose, onOpenResume }) {
           {copied && (
             <div className="p-3 mx-2 my-1 rounded-xl bg-[#111416] border border-[#D6AD60]/40 text-[#D6AD60] text-xs font-mono flex items-center gap-2">
               <Check className="w-4 h-4 text-[#D6AD60]" />
-              <span>Email copied to clipboard: prince.cse.dev@gmail.com</span>
+              <span>Email copied to clipboard: princeraj.947168@gmail.com</span>
             </div>
           )}
 
