@@ -24,51 +24,69 @@ export default function Hero3DCanvas() {
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       mount.appendChild(renderer.domElement);
     } catch (e) {
-      console.warn("WebGL not supported or disabled:", e);
+      console.warn("WebGL not supported:", e);
       return;
     }
 
-    // Outer Wireframe Polyhedron (Cyber Core)
-    const outerGeo = new THREE.IcosahedronGeometry(1.6, 1);
-    const outerMat = new THREE.MeshBasicMaterial({
-      color: 0x38bdf8,
+    // Outer Gyroscope Rings (Architectural Mechanical Computing)
+    const ring1Geo = new THREE.TorusGeometry(1.65, 0.02, 16, 100);
+    const ring1Mat = new THREE.MeshStandardMaterial({
+      color: 0xf59e0b, // Amber Gold
+      metalness: 0.85,
+      roughness: 0.25,
+    });
+    const ring1 = new THREE.Mesh(ring1Geo, ring1Mat);
+    scene.add(ring1);
+
+    const ring2Geo = new THREE.TorusGeometry(1.4, 0.018, 16, 100);
+    const ring2Mat = new THREE.MeshStandardMaterial({
+      color: 0xd4d4d8, // Titanium Silver
+      metalness: 0.9,
+      roughness: 0.2,
+    });
+    const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
+    scene.add(ring2);
+
+    // Inner Wireframe Dodecahedron
+    const dodecaGeo = new THREE.DodecahedronGeometry(1.05, 0);
+    const dodecaMat = new THREE.MeshBasicMaterial({
+      color: 0xfbbf24,
       wireframe: true,
       transparent: true,
-      opacity: 0.45,
+      opacity: 0.4,
     });
-    const outerMesh = new THREE.Mesh(outerGeo, outerMat);
-    scene.add(outerMesh);
+    const dodecaMesh = new THREE.Mesh(dodecaGeo, dodecaMat);
+    scene.add(dodecaMesh);
 
     // Inner Solid Faceted Core
-    const innerGeo = new THREE.OctahedronGeometry(0.9, 0);
+    const innerGeo = new THREE.OctahedronGeometry(0.65, 0);
     const innerMat = new THREE.MeshStandardMaterial({
-      color: 0x0284c7,
-      roughness: 0.2,
-      metalness: 0.85,
-      wireframe: false,
+      color: 0xd97706,
+      metalness: 0.8,
+      roughness: 0.3,
     });
     const innerMesh = new THREE.Mesh(innerGeo, innerMat);
     scene.add(innerMesh);
 
-    // Vertex points on outer lattice
-    const pointGeo = new THREE.IcosahedronGeometry(1.6, 1);
-    const pointMat = new THREE.PointsMaterial({
-      color: 0x22d3ee,
-      size: 0.06,
+    // Node Vertex Points
+    const nodePointsGeo = new THREE.DodecahedronGeometry(1.05, 0);
+    const nodePointsMat = new THREE.PointsMaterial({
+      color: 0xfde68a,
+      size: 0.08,
       transparent: true,
-      opacity: 0.9,
+      opacity: 0.95,
     });
-    const pointsMesh = new THREE.Points(pointGeo, pointMat);
-    scene.add(pointsMesh);
+    const nodePoints = new THREE.Points(nodePointsGeo, nodePointsMat);
+    scene.add(nodePoints);
 
-    // Orbiting 3D Particle Cloud
-    const particleCount = 220;
+    // Orbiting Golden / Silver Stardust Field
+    const particleCount = 180;
     const particleGeo = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
 
     for (let i = 0; i < particleCount; i++) {
-      const radius = 1.9 + Math.random() * 1.4;
+      const radius = 1.8 + Math.random() * 1.2;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(Math.random() * 2 - 1);
 
@@ -76,38 +94,39 @@ export default function Hero3DCanvas() {
       positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
       positions[i * 3 + 2] = radius * Math.cos(phi);
 
-      // Gradient between Cyan (0.13, 0.82, 0.93) and Electric Blue (0.05, 0.64, 0.91)
-      colors[i * 3] = 0.1 + Math.random() * 0.15;
-      colors[i * 3 + 1] = 0.65 + Math.random() * 0.25;
-      colors[i * 3 + 2] = 0.9 + Math.random() * 0.1;
+      // Warm Amber (0.98, 0.75, 0.2) to Titanium White (0.9, 0.9, 0.95)
+      const isWarm = Math.random() > 0.4;
+      colors[i * 3] = isWarm ? 0.98 : 0.88;
+      colors[i * 3 + 1] = isWarm ? 0.75 : 0.88;
+      colors[i * 3 + 2] = isWarm ? 0.25 : 0.92;
     }
 
     particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const particleMat = new THREE.PointsMaterial({
-      size: 0.045,
+      size: 0.04,
       vertexColors: true,
       transparent: true,
-      opacity: 0.8,
+      opacity: 0.75,
     });
 
-    const particleCloud = new THREE.Points(particleGeo, particleMat);
-    scene.add(particleCloud);
+    const particleField = new THREE.Points(particleGeo, particleMat);
+    scene.add(particleField);
 
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    // Studio Quality Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
 
-    const pointLight1 = new THREE.PointLight(0x38bdf8, 3, 20);
-    pointLight1.position.set(3, 4, 3);
-    scene.add(pointLight1);
+    const warmKeyLight = new THREE.PointLight(0xf59e0b, 2.5, 20);
+    warmKeyLight.position.set(4, 4, 3);
+    scene.add(warmKeyLight);
 
-    const pointLight2 = new THREE.PointLight(0x06b6d4, 2, 20);
-    pointLight2.position.set(-3, -3, 2);
-    scene.add(pointLight2);
+    const silverRimLight = new THREE.PointLight(0xe4e4e7, 1.8, 20);
+    silverRimLight.position.set(-4, -3, 2);
+    scene.add(silverRimLight);
 
-    // Mouse Tracking for Interactive 3D Rotation
+    // Mouse Tracking for Smooth 3D Inertia
     let mouseX = 0;
     let mouseY = 0;
     let targetX = 0;
@@ -123,7 +142,6 @@ export default function Hero3DCanvas() {
 
     window.addEventListener('mousemove', onMouseMove);
 
-    // Resize Handler
     const onResize = () => {
       if (!mount || !renderer) return;
       const newWidth = mount.clientWidth;
@@ -144,33 +162,38 @@ export default function Hero3DCanvas() {
 
       const elapsedTime = clock.getElapsedTime();
 
-      // Smooth mouse follow
+      // Smooth interpolation
       mouseX += (targetX - mouseX) * 0.05;
       mouseY += (targetY - mouseY) * 0.05;
 
-      // Rotations
-      outerMesh.rotation.x = elapsedTime * 0.25 + mouseY * 0.5;
-      outerMesh.rotation.y = elapsedTime * 0.35 + mouseX * 0.5;
+      // Gyroscope Ring Rotations
+      ring1.rotation.x = elapsedTime * 0.35 + mouseY * 0.4;
+      ring1.rotation.y = elapsedTime * 0.4 + mouseX * 0.4;
 
-      pointsMesh.rotation.x = outerMesh.rotation.x;
-      pointsMesh.rotation.y = outerMesh.rotation.y;
+      ring2.rotation.x = -elapsedTime * 0.4 - mouseY * 0.3;
+      ring2.rotation.z = elapsedTime * 0.3 + mouseX * 0.3;
 
-      innerMesh.rotation.x = -elapsedTime * 0.4 - mouseY * 0.3;
-      innerMesh.rotation.y = -elapsedTime * 0.5 - mouseX * 0.3;
+      dodecaMesh.rotation.x = elapsedTime * 0.2 + mouseY * 0.2;
+      dodecaMesh.rotation.y = elapsedTime * 0.25 + mouseX * 0.2;
 
-      particleCloud.rotation.y = elapsedTime * 0.12 + mouseX * 0.2;
-      particleCloud.rotation.z = elapsedTime * 0.08;
+      nodePoints.rotation.x = dodecaMesh.rotation.x;
+      nodePoints.rotation.y = dodecaMesh.rotation.y;
 
-      // Pulse inner core slightly
-      const scale = 1 + Math.sin(elapsedTime * 2) * 0.05;
-      innerMesh.scale.set(scale, scale, scale);
+      innerMesh.rotation.x = -elapsedTime * 0.5;
+      innerMesh.rotation.y = -elapsedTime * 0.6;
+
+      particleField.rotation.y = elapsedTime * 0.08 + mouseX * 0.15;
+      particleField.rotation.x = elapsedTime * 0.05;
+
+      // Subtle breath
+      const s = 1 + Math.sin(elapsedTime * 2.2) * 0.04;
+      innerMesh.scale.set(s, s, s);
 
       renderer.render(scene, camera);
     };
 
     animate();
 
-    // Cleanup
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('mousemove', onMouseMove);
@@ -178,12 +201,16 @@ export default function Hero3DCanvas() {
       if (mount && renderer.domElement) {
         mount.removeChild(renderer.domElement);
       }
-      outerGeo.dispose();
-      outerMat.dispose();
+      ring1Geo.dispose();
+      ring1Mat.dispose();
+      ring2Geo.dispose();
+      ring2Mat.dispose();
+      dodecaGeo.dispose();
+      dodecaMat.dispose();
       innerGeo.dispose();
       innerMat.dispose();
-      pointGeo.dispose();
-      pointMat.dispose();
+      nodePointsGeo.dispose();
+      nodePointsMat.dispose();
       particleGeo.dispose();
       particleMat.dispose();
       renderer.dispose();
@@ -194,14 +221,12 @@ export default function Hero3DCanvas() {
     <div className="relative w-full h-full flex items-center justify-center">
       <div
         ref={mountRef}
-        className="w-[320px] h-[320px] sm:w-[420px] sm:h-[420px] lg:w-[480px] lg:h-[480px] cursor-grab active:cursor-grabbing"
+        className="w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] lg:w-[450px] lg:h-[450px] cursor-grab active:cursor-grabbing"
       />
-      {/* 3D Core floating label */}
-      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-mono tracking-wider text-cyan-400/80 bg-slate-900/80 border border-cyan-500/20 backdrop-blur-md pointer-events-none">
-        <span className="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-ping mr-2"></span>
-        INTERACTIVE 3D SYSTEM
+      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider text-amber-300 bg-carbon-900/90 border border-amber-500/30 backdrop-blur-md pointer-events-none shadow-md">
+        <span className="inline-block w-2 h-2 rounded-full bg-amber-400 animate-ping mr-2"></span>
+        3D GYROSCOPE SYSTEM
       </div>
     </div>
   );
 }
-

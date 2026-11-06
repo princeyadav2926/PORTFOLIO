@@ -2,11 +2,13 @@ export const portfolioData = {
   personal: {
     name: "Prince Kumar",
     role: "B.Tech CSE Student | Aspiring Full Stack Developer",
-    location: "India",
+    location: "Bhopal, India",
+    college: "Lakshami Narayan College Of Technology And Science, Bhopal",
+    collegeShort: "LNCTS Bhopal",
     tagline: "Building Digital Experiences Through Code, Creativity and Problem Solving.",
     githubUrl: "https://github.com/princeyadav2926",
     linkedinUrl: "https://www.linkedin.com/in/prince-kumar-8897a8368/",
-    email: "prince.cse.dev@gmail.com", // Editable
+    email: "prince.cse.dev@gmail.com",
     openToWork: true,
     statusText: "Available for Internships & Projects",
   },
@@ -14,15 +16,16 @@ export const portfolioData = {
   intro: {
     greeting: "Hi, I'm Prince Kumar.",
     bio: [
-      "I am a Computer Science Engineering student passionate about Full Stack Development, Data Structures and Algorithms, programming and emerging technologies.",
-      "I enjoy developing practical applications, solving programming problems and exploring innovative ideas.",
-      "My goal is to become a skilled software developer and build impactful real-world solutions."
+      "I am a Computer Science Engineering student at Lakshami Narayan College Of Technology And Science, Bhopal, passionate about Full Stack Development, Data Structures and Algorithms, programming, and real-world software engineering.",
+      "I enjoy developing practical applications, solving algorithmic challenges, and exploring modern distributed and web technologies.",
+      "My goal is to become an exceptional software engineer and build resilient, impactful solutions."
     ],
-    aboutMeFull: "I am Prince Kumar, a B.Tech Computer Science Engineering student passionate about technology and software development. My learning journey includes programming with C++, Java and Python, Data Structures and Algorithms, and Full Stack Web Development. I enjoy building projects that solve real-world problems and continuously improving my technical knowledge. I am particularly interested in software engineering, web development, AI applications and problem solving."
+    aboutMeFull: "I am Prince Kumar, a B.Tech Computer Science Engineering student at Lakshami Narayan College Of Technology And Science, Bhopal. My engineering focus combines strong programming foundations in C++, Java, and Python with modern Full Stack Web Development (React, Node.js, Express, databases) and core Data Structures & Algorithms. I thrive on translating complex requirements into clean, performant, and reliable software."
   },
 
   hero: {
     heading: "Hi, I'm Prince Kumar",
+    collegeBadge: "LNCTS Bhopal &bull; B.Tech CSE",
     animatedRoles: [
       "Full Stack Developer",
       "C++ Programmer",
@@ -31,7 +34,7 @@ export const portfolioData = {
       "Software Developer",
       "Technology Explorer"
     ],
-    description: "I transform ideas into functional digital experiences using programming, creativity and modern technologies.",
+    description: "I engineer clean, reliable web applications and solve algorithmic problems using programming craft, modern architecture, and purposeful problem-solving.",
     buttons: [
       { label: "Explore My Projects", href: "#projects", primary: true },
       { label: "Download Resume", action: "resume", secondary: true },
@@ -41,55 +44,55 @@ export const portfolioData = {
 
   skills: {
     programmingLanguages: [
-      { name: "C++", category: "Core", icon: "Code", highlight: "Problem Solving & DSA" },
-      { name: "Java", category: "Core", icon: "Coffee", highlight: "OOP & Enterprise Logic" },
-      { name: "Python", category: "Scripting / AI", icon: "Terminal", highlight: "Automation & Data" },
-      { name: "JavaScript", category: "Web Core", icon: "FileCode", highlight: "ES6+ & Async/Await" },
+      { name: "C++", category: "System / Algorithmic", icon: "Code", highlight: "Competitive Coding & Data Structures" },
+      { name: "Java", category: "Core & Enterprise", icon: "Coffee", highlight: "Object-Oriented Design & Logic" },
+      { name: "Python", category: "Scripting & Data", icon: "Terminal", highlight: "Automation & Numerical Analysis" },
+      { name: "JavaScript", category: "Web Standards", icon: "FileCode", highlight: "ES6+, Async Architecture & DOM" },
     ],
     fullStack: {
       frontend: [
-        { name: "React.js", desc: "Component Architecture & Hooks", level: "Core Library" },
-        { name: "Tailwind CSS", desc: "Utility-First Responsive UI", level: "Modern Styling" },
-        { name: "JavaScript (ES6+)", desc: "DOM, Closures & Event Loop", level: "Scripting Core" },
-        { name: "HTML5", desc: "Semantic Web Structure", level: "Standard" },
-        { name: "CSS3", desc: "Flexbox, Grid & Keyframe Animations", level: "Styling" },
+        { name: "React.js", desc: "Component hierarchies, hooks, state lifecycle", level: "Primary Library" },
+        { name: "Tailwind CSS", desc: "Utility-first design systems & responsive layouts", level: "Styling Architecture" },
+        { name: "JavaScript (ES6+)", desc: "Closures, promises, event loop & modern syntax", level: "Core Runtime" },
+        { name: "HTML5", desc: "Semantic markup, accessibility, modern standards", level: "Markup" },
+        { name: "CSS3", desc: "Flexbox, CSS Grid, keyframes & transform layouts", level: "Styling" },
       ],
       backend: [
-        { name: "Node.js", desc: "Event-driven runtime environment", level: "Runtime" },
-        { name: "Express.js", desc: "Modular routing & middleware", level: "Framework" },
-        { name: "REST APIs", desc: "Resource modeling, HTTP methods, JSON", level: "Architecture" },
+        { name: "Node.js", desc: "Event-driven asynchronous backend runtime", level: "Runtime" },
+        { name: "Express.js", desc: "RESTful routing, custom middleware & controllers", level: "Framework" },
+        { name: "REST APIs", desc: "JSON schemas, HTTP verbs, stateless endpoints", level: "Architecture" },
       ],
       database: [
-        { name: "MongoDB", desc: "NoSQL document store & aggregation", level: "NoSQL" },
-        { name: "MySQL", desc: "Relational schemas & SQL queries", level: "RDBMS" },
-        { name: "SQLite", desc: "Lightweight embedded storage", level: "Embedded SQL" },
+        { name: "MongoDB", desc: "NoSQL document collections & aggregation pipelines", level: "Document Store" },
+        { name: "MySQL", desc: "Relational modeling, normalization & SQL querying", level: "RDBMS" },
+        { name: "SQLite", desc: "Embedded relational transactional storage", level: "Embedded SQL" },
       ]
     },
     dsaAndCS: [
-      { name: "Arrays", focus: "Contiguous Memory & Two Pointers" },
-      { name: "Strings", focus: "Pattern Matching & Anagrams" },
-      { name: "Linked Lists", focus: "Singly, Doubly & Fast-Slow Pointers" },
-      { name: "Stack", focus: "LIFO, Monotonic Stack & Expression Parsing" },
-      { name: "Queue", focus: "FIFO, Circular & Double-Ended Queues" },
-      { name: "Trees", focus: "Binary Trees, BST & Traversals (DFS/BFS)" },
-      { name: "Searching", focus: "Binary Search & Linear Search" },
-      { name: "Sorting", focus: "Merge Sort, Quick Sort & In-Place Sorts" },
-      { name: "Recursion", focus: "Base Cases & Call Stack Operations" },
-      { name: "Object-Oriented Programming", focus: "Encapsulation, Inheritance, Polymorphism" },
-      { name: "Problem Solving", focus: "Time & Space Complexity Optimization" },
-      { name: "DBMS", focus: "ACID Properties, Normalization & Indexing" },
+      { name: "Arrays", focus: "Contiguous arrays, prefix sums, two pointers & sliding window" },
+      { name: "Strings", focus: "Pattern matching, anagrams & substring operations" },
+      { name: "Linked Lists", focus: "Singly, doubly, cycle detection & node manipulation" },
+      { name: "Stack", focus: "LIFO mechanisms, monotonic stacks & expression parsing" },
+      { name: "Queue", focus: "FIFO processing, BFS traversals & deque structures" },
+      { name: "Trees", focus: "Binary trees, BST search, insertions & DFS/BFS traversal" },
+      { name: "Searching", focus: "Binary search algorithms & boundary conditions" },
+      { name: "Sorting", focus: "Divide-and-conquer, Merge sort & Quick sort invariants" },
+      { name: "Recursion", focus: "Recursive call frames, base states & backtracking" },
+      { name: "Object-Oriented Programming", focus: "Encapsulation, inheritance, polymorphism & abstraction" },
+      { name: "Problem Solving", focus: "Algorithmic time and memory complexity optimization" },
+      { name: "DBMS", focus: "ACID principles, indexing, keys & schema integrity" },
     ],
     developerTools: [
-      { name: "Git", desc: "Distributed version control system", type: "VCS" },
-      { name: "GitHub", desc: "Collaboration & open-source hosting", type: "Platform" },
-      { name: "VS Code", desc: "Primary code editing environment", type: "IDE" },
-      { name: "Google Antigravity", desc: "Advanced agentic development environment", type: "Agentic IDE" },
-      { name: "Vercel", desc: "Modern frontend deployment & serverless", type: "Cloud Host" },
+      { name: "Git", desc: "Distributed version control & branch branching", type: "VCS" },
+      { name: "GitHub", desc: "Collaborative pull requests & open source hosting", type: "Platform" },
+      { name: "VS Code", desc: "Configured developer IDE with extensions", type: "Editor" },
+      { name: "Google Antigravity", desc: "Advanced agentic development workflow", type: "Agentic Suite" },
+      { name: "Vercel", desc: "Edge hosting, automated builds & preview deploys", type: "Cloud Deployment" },
     ],
     aiAndEmerging: [
-      { name: "Generative AI", desc: "LLM integration, multimodality & reasoning flows" },
-      { name: "Prompt Engineering", desc: "Structured prompt design, few-shot prompting & system prompts" },
-      { name: "AI Tools", desc: "Development copilot workflows & productivity augmentation" },
+      { name: "Generative AI", desc: "LLM integration patterns & multimodal application logic" },
+      { name: "Prompt Engineering", desc: "Few-shot prompting, system instructions & structured outputs" },
+      { name: "AI Tools", desc: "Developer copilot augmentation & workflow optimization" },
     ]
   },
 
@@ -97,8 +100,8 @@ export const portfolioData = {
     {
       id: "opportunity-radar",
       title: "Opportunity Radar",
-      category: "AI | Full Stack Development | Career Intelligence",
-      tag: "Flagship Project",
+      category: "Full Stack & Opportunity Discovery Platform",
+      tag: "Flagship Engineering",
       status: "Active Development",
       description: "Opportunity Radar is an intelligent student opportunity discovery platform designed to help students discover, understand and track relevant opportunities such as internships, hackathons, scholarships, and fellowships.",
       coreConcept: [
@@ -124,7 +127,7 @@ export const portfolioData = {
       ],
       technologies: ["React.js", "Node.js", "Express.js", "MongoDB", "Tailwind CSS", "REST APIs"],
       githubUrl: "https://github.com/princeyadav2926",
-      liveUrl: null, // Keep missing info editable/transparent
+      liveUrl: null,
       highlights: [
         "Centralized student career intelligence",
         "Clean responsive student interface",
@@ -134,8 +137,8 @@ export const portfolioData = {
     {
       id: "terraforge",
       title: "TerraForge",
-      category: "AI | Environmental Technology",
-      tag: "Environmental AI",
+      category: "Environmental Forecasting & Atmospheric Analysis",
+      tag: "Environmental Tech",
       status: "System Architecture & Research",
       description: "Air Pollution Weather Coupled Forecasting System focused on Delhi NCR, providing predictive environmental insights and regional atmospheric risk modeling.",
       coreConcept: [
@@ -162,8 +165,8 @@ export const portfolioData = {
     {
       id: "smart-shopping",
       title: "Smart Shopping",
-      category: "Full Stack Web Development",
-      tag: "Full Stack App",
+      category: "Full Stack Web Application",
+      tag: "E-Commerce System",
       status: "Functional Prototype",
       description: "A smart shopping platform engineered to provide an improved product discovery, filtering and responsive checkout experience.",
       coreConcept: [
@@ -189,8 +192,8 @@ export const portfolioData = {
     {
       id: "dsa-programming",
       title: "DSA and Programming Practice",
-      category: "Programming | Problem Solving",
-      tag: "Algorithms & Core",
+      category: "Algorithmic Problem Solving & Data Structures",
+      tag: "Computer Science Core",
       status: "Continuous Practice",
       description: "A structured collection of programming practice, algorithmic problems and data structure implementations using C++ and Java.",
       coreConcept: [
@@ -232,8 +235,8 @@ export const portfolioData = {
     pillars: [
       {
         id: "frontend",
-        title: "Frontend Development",
-        role: "Client Experience & Interactivity",
+        title: "Frontend Engineering",
+        role: "Client Architecture & User Interaction",
         tools: ["React.js", "HTML5", "CSS3", "JavaScript", "Tailwind CSS"],
         points: [
           "Building reusable, declarative component architectures in React",
@@ -244,8 +247,8 @@ export const portfolioData = {
       },
       {
         id: "backend",
-        title: "Backend Development",
-        role: "API Engine & Business Logic",
+        title: "Backend Engineering",
+        role: "API Routing & Business Logic",
         tools: ["Node.js", "Express.js", "REST APIs"],
         points: [
           "Designing RESTful endpoints with consistent JSON contracts",
@@ -268,8 +271,8 @@ export const portfolioData = {
       },
       {
         id: "workflow",
-        title: "Developer Workflow & Tooling",
-        role: "Productivity & Deployment Pipeline",
+        title: "Engineering Workflow",
+        role: "Development Toolchain & Deployment",
         tools: ["Git", "GitHub", "VS Code", "Vercel"],
         points: [
           "Git branch management, commits and pull request workflows on GitHub",
@@ -303,9 +306,10 @@ export const portfolioData = {
     degree: "Bachelor of Technology (B.Tech)",
     branch: "Computer Science and Engineering",
     status: "Currently Pursuing (Undergraduate)",
-    // Editable college placeholder as per requirement
-    institution: "Engineering College / University, India",
-    isEditableNotice: "College name and academic milestones can be customized in profile settings.",
+    institution: "Lakshami Narayan College Of Technology And Science, Bhopal",
+    institutionShort: "LNCTS Bhopal",
+    location: "Bhopal, Madhya Pradesh, India",
+    isEditableNotice: "Verified college details configured. Fully editable in settings.",
     coursework: [
       "Data Structures & Algorithms",
       "Object-Oriented Programming (C++ / Java)",
@@ -321,7 +325,7 @@ export const portfolioData = {
       title: "Prompt Engineering",
       issuer: "AI / Technology Program",
       focus: "Contextual framing, zero-shot/few-shot techniques, system prompt design and LLM orchestration.",
-      badge: "AI & LLM"
+      badge: "AI & Systems"
     },
     {
       id: "cert-chatgpt-ai",
@@ -335,7 +339,7 @@ export const portfolioData = {
       title: "Data Analytics with Generative AI",
       issuer: "Generative AI Program",
       focus: "Synthesizing datasets, automated reporting patterns, and AI-accelerated exploratory data analysis.",
-      badge: "Data & AI"
+      badge: "Data Systems"
     },
     {
       id: "cert-networking",
@@ -346,4 +350,3 @@ export const portfolioData = {
     }
   ]
 };
-
